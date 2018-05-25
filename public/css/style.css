@@ -1,0 +1,80 @@
+
+#login_button {
+    margin-top:80px;
+}
+
+#message_info {
+    padding:24px;
+}
+
+#main_tab {
+    background-color:#1e9ad5;
+}
+nav {
+    background-color:#1e9ad5;
+}
+
+.tabs .tab a {
+    color:#7ec6e8;
+}
+.tabs .tab a.active {
+    color:white;
+}
+.tabs .tab a:hover, a:focus.active {
+    color:white;
+}
+.tabs .indicator {
+    background-color:white;
+}
+.tabs-content .carousel .carousel-slider {
+    height:100%;
+}
+#ranking_tab, #schedule_tab, #standing_tab {
+    height:100%;
+    overflow:scroll;
+}
+html,body{
+    height:100%;
+    color:#666666;
+}
+.player-seq {
+    text-align: right;
+    width:32px;
+    font-size:16px;
+    margin-left:4px;
+}
+.player-image {
+    margin:4px 8px;
+    width:48px;
+    height:48px;
+    padding: 1px;
+    background-color: #eeeeee;
+}
+.player-name {    
+    width:100%;
+}
+.player-score {
+    font-size:28px;
+    margin-right:8px;
+}
+.list-line{
+    margin-left:80px;
+    padding: 0 30px 0 30px;
+    height: 1px;
+    border-bottom: 1px solid #eeeeee;
+}
+.match-seq {
+    text-align: right;
+    width:24px;
+    font-size:16px;
+    margin-left:4px;
+}
+.match-team {
+    width:84px;
+    text-align:center;
+    font-size:12px;
+}
+nav .brand-logo {
+    font-size:20px;
+    margin-left:16px;
+}
