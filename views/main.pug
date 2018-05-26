@@ -22,7 +22,7 @@ html
         li
           div(class="valign-wrapper")
             - var url = "https://graph.facebook.com/"+id+"/picture";
-            img(src=url,class="player-image circle",width="48")
+            img(src=url,class="circle-image circle")
             span=name
         li
           a(href="./signin")="Logout"
@@ -31,7 +31,7 @@ html
           div(class="valign-wrapper",style="clear:both")
             div(class="player-seq left") #{player.seq}. 
             - var url = "https://graph.facebook.com/"+player.id+"/picture";
-            img(src=url,class="player-image circle",width="48")
+            img(src=url,class="circle-image circle")
             div(class="player-name left") #{player.name}
             div(class="player-score right") #{player.score}
           div(class="list-line")
@@ -42,24 +42,24 @@ html
             div(class="match-seq left") #{match.match_no}.
             div(class="match-team left")
               - var url = "/images/"+match.home_team+".png";
-              img(src=url,class="player-image circle",width="48")
+              img(src=url,class="circle-image circle")
               div #{match.home_team_name}            
             div(class="match-team left")          
               - var url = "/images/"+match.away_team+".png";
-              img(src=url,class="player-image circle",width="48")
+              img(src=url,class="circle-image circle")
               div #{match.away_team_name}
           
 
       div(id="standing_tab",class="col s12")
         p="Standing"
           p
-            img(src="/images/GER.png",class="circle",width="48")            
+            img(src="/images/GER.png",class="circle")            
           p
-            img(src="/images/GER.png",class="circle",width="48")
+            img(src="/images/GER.png",class="circle")
           p
-            img(src="/images/GER.png",class="circle",width="48")
+            img(src="/images/GER.png",class="circle")
           p
-            img(src="/images/DEN.png",class="circle",width="48")
+            img(src="/images/DEN.png",class="circle")
   
     
     script(src="js/main.js",type="text/javascript")

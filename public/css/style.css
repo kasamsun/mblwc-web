@@ -43,12 +43,13 @@ html,body{
     font-size:16px;
     margin-left:4px;
 }
-.player-image {
+.circle-image {
     margin:4px 8px;
     width:48px;
     height:48px;
     padding: 1px;
     background-color: #eeeeee;
+    box-shadow: 1px 1px 4px #999999;
 }
 .player-name {    
     width:100%;
