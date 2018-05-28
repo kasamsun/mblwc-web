@@ -1,0 +1,60 @@
+html
+  include header.pug
+  body
+    div
+      #main_page
+        nav.nav-extended
+          .nav-wrapper.left-align
+            a.brand-logo(href='#') World Cup 2018
+            a.sidenav-trigger(href='#', data-target='player_info')
+              i.material-icons menu
+          ul#main_tab.tabs
+            li.tab.col.s3
+              a.active(href='#ranking_tab') Ranking
+            li.tab.col.s3
+              a(href='#schedule_tab') Schedule
+            li.tab.col.s3
+              a(href='#standing_tab') Standing
+
+        ul#player_info.sidenav
+          li
+            .valign-wrapper
+              - var url = "https://graph.facebook.com/"+id+"/picture";
+              img.circle-image.circle(src=url)
+              span=name
+          li
+            a(href='./signin') Logout
+
+        #ranking_tab.col.s12          
+          for player in players
+            #rank_list_page
+              .list-row.valign-wrapper(onclick="showPopup('"+player.id+"');")
+                .player-seq.left #{player.seq}.
+                .player-img.left
+                  - var url = "https://graph.facebook.com/"+player.id+"/picture";
+                  img.circle-image.circle(src=url, alt=player.name)
+                .player-name.left #{player.name}
+                .player-score.right #{player.score}
+              .list-line
+
+        #schedule_tab.col.s12
+          for match in matches
+            .list-row.valign-wrapper
+              .match-seq.left #{match.match_no}.
+              .match-team.left
+                - var url = "/images/"+match.home_team+".png";
+                img.circle-image.circle(src=url, alt=match.home_team)
+                div #{match.home_team_name}            
+              .match-team.left
+                - var url = "/images/"+match.away_team+".png";
+                img.circle-image.circle(src=url, alt=match.away_team)
+                div #{match.away_team_name}
+
+        #standing_tab.col.s12
+          p Standing
+
+      #popup_page
+        p detail information here
+        button(onclick='closePopup();') Back
+    
+    script(src="js/main.js",type="text/javascript")

@@ -55,7 +55,8 @@ exports.getPlayerRank = async function(req, res) {
                 seq: ++seqNo,
                 id: player.id,
                 name: player.name,
-                score: player.score
+                score: player.score,
+                level: (seqNo<=1)?1:(seqNo<=2)?2:(seqNo<=3)?3:undefined
             }        
         })
     }

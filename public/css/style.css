@@ -1,19 +1,24 @@
-
+html,body{
+    height:100%;
+    color:#666666;    
+	overflow: hidden;
+}
 #login_button {
     margin-top:80px;
 }
-
 #message_info {
     padding:24px;
 }
-
 #main_tab {
     background-color:#1e9ad5;
 }
 nav {
     background-color:#1e9ad5;
 }
-
+nav .nav-wrapper .back-button i {
+    margin-left:16px;
+    cursor:pointer;
+}
 .tabs .tab a {
     color:#7ec6e8;
 }
@@ -33,16 +38,6 @@ nav {
     height:100%;
     overflow:scroll;
 }
-html,body{
-    height:100%;
-    color:#666666;
-}
-.player-seq {
-    text-align: right;
-    width:32px;
-    font-size:16px;
-    margin-left:4px;
-}
 .circle-image {
     margin:4px 8px;
     width:48px;
@@ -51,8 +46,31 @@ html,body{
     background-color: #eeeeee;
     box-shadow: 1px 1px 4px #999999;
 }
+.list-row {
+    clear:both;
+    width: 100%;
+    margin:2px 0px;
+}
+.list-row.waves-effect {
+    display:flex;
+}
+.waves-effect.waves-light-grey .waves-ripple {
+    background-color: rgba(224, 224, 224, 0.45);
+}
+.player-seq {
+    text-align: right;
+    width:50px;
+    font-size:16px;
+    margin-left:4px;
+}
+.player-img {    
+    width:64px;
+}
 .player-name {    
-    width:100%;
+    width:-moz-available;
+}
+.player-name img {
+    vertical-align: middle;
 }
 .player-score {
     font-size:28px;
@@ -65,17 +83,63 @@ html,body{
     border-bottom: 1px solid #eeeeee;
 }
 .match-seq {
-    text-align: right;
-    width:24px;
+    text-align: center;
+    width:50px;
     font-size:16px;
     margin-left:4px;
 }
+.match-date {
+    width:-moz-available;
+    font-size:12px;
+    line-height: 1;
+}
 .match-team {
-    width:84px;
+    width:82px;
     text-align:center;
     font-size:12px;
+}
+.match-score {
+    width:65px;
+    text-align: center;
+}
+.match-score .score {
+    line-height: 1;
+    font-size: 28px;
+}
+.match-score .score-120 {
+    line-height: 1;
+    font-size: 12px;
+}
+.match-score .score-pk {
+    line-height: 1;
+    font-size: 12px;
+}
+.match-result {
+    width:35px;    
+    text-align: center;
+}
+.match-action {
+    width:60px;    
+    text-align: center;
 }
 nav .brand-logo {
     font-size:20px;
     margin-left:16px;
+}
+#popup_page {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+    top: 0;
+    z-index:1000;
+    visibility: visible;
+    display:none;
+	overflow: hidden;
+    background-color:white;
+    
+}
+#popup_content .list-row{
+    width:100%;
+    display:inline-flex;
+    margin-top:8px;
 }

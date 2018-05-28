@@ -9,7 +9,16 @@ window.fbAsyncInit = function() {
         version     : 'v3.0'
     });
     FB.AppEvents.logPageView();
+    $("#login_button").toggleClass("disabled");
+    $("#login_button").addClass("animated");
+    window.setTimeout('animate()',5000);
 };
+
+var anims = ['swing','tada','jello','rubberBand','bounce'];
+function animate() {
+    $("#login_button").removeClass(anims.join(" ")).addClass(_.sample(anims));
+    window.setTimeout('animate()',5000);
+}
 
 (function(d, s, id){
     var js, fjs = d.getElementsByTagName(s)[0];
@@ -27,7 +36,7 @@ function loginFacebook() {
             FB.api('/me', function(info) {
                 $.post("/api/login", info, function(player, status){
                     if (player){
-                        location.href='/main?id='+player.id+'&token='+player.token;
+                        location.href='/main?id='+player.id+'&token='+player.token;                        
                     }else{
                         $.LoadingOverlay("hide");
                     }

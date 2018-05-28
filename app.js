@@ -5,8 +5,9 @@ var mongoose = require('mongoose');
 var playerController = require('./controllers/players');
 var matchController = require('./controllers/matches');
 
+mongoose.connect("mongodb://127.0.0.1:27017/mblwc");
 //mongoose.connect("mongodb://mblwc:mblwc@ds133550.mlab.com:33550/mblwc");
-mongoose.connect("mongodb://uezo1pgaabt2y1o:Aj3Ms6vC16UL7OKJjN56@bnjo0mjdq69bryf-mongodb.services.clever-cloud.com:27017/bnjo0mjdq69bryf");
+//mongoose.connect("mongodb://uezo1pgaabt2y1o:Aj3Ms6vC16UL7OKJjN56@bnjo0mjdq69bryf-mongodb.services.clever-cloud.com:27017/bnjo0mjdq69bryf");
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -15,6 +16,7 @@ db.once('open', function () {
     mongoose.connection.readyState);
 });
 
+app.locals.moment = require('moment');
 app.set('view engine', 'pug')
 app.use(express.static("./public"));
 app.use(bodyParser.json());
@@ -33,6 +35,12 @@ app.get(["/main"], async function (req, res) {
     res.render(req.path.split("/").join(""),result);
 })
 
+app.get(["/test"], function (req, res) {  
+    res.render(req.path.split("/").join(""),{})
+})
+app.get(["/testanim"], function (req, res) {  
+    res.render(req.path.split("/").join(""),{})
+})
 app.post(["/api/login"], playerController.login)
 
 app.use(errorHandler);
