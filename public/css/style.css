@@ -47,8 +47,6 @@ nav .nav-wrapper .back-button i {
     box-shadow: 1px 1px 4px #999999;
 }
 .list-row {
-    clear:both;
-    width: 100%;
     margin:2px 0px;
 }
 .list-row.waves-effect {
@@ -57,17 +55,18 @@ nav .nav-wrapper .back-button i {
 .waves-effect.waves-light-grey .waves-ripple {
     background-color: rgba(224, 224, 224, 0.45);
 }
+.row .col {
+    padding:unset;
+}
+.col .row {
+    margin:unset;
+}
 .player-seq {
-    text-align: right;
-    width:50px;
-    font-size:16px;
-    margin-left:4px;
+    font-size:20px;
 }
-.player-img {    
-    width:64px;
+.player-img {
 }
-.player-name {    
-    width:-moz-available;
+.player-name {
 }
 .player-name img {
     vertical-align: middle;
@@ -83,24 +82,15 @@ nav .nav-wrapper .back-button i {
     border-bottom: 1px solid #eeeeee;
 }
 .match-seq {
-    text-align: center;
-    width:50px;
-    font-size:16px;
+    font-size:20px;
     margin-left:4px;
 }
 .match-date {
-    width:-moz-available;
     font-size:12px;
     line-height: 1;
 }
 .match-team {
-    width:82px;
-    text-align:center;
     font-size:12px;
-}
-.match-score {
-    width:65px;
-    text-align: center;
 }
 .match-score .score {
     line-height: 1;
@@ -115,12 +105,7 @@ nav .nav-wrapper .back-button i {
     font-size: 12px;
 }
 .match-result {
-    width:40px;    
-    text-align: center;
-}
-.match-action {
-    width:60px;    
-    text-align: center;
+    font-size: 12px;
 }
 nav .brand-logo {
     font-size:20px;
