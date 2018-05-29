@@ -26,7 +26,7 @@ html
 
       #ranking_tab.col.s12          
         for player in players
-          .list-row.row.valign-wrapper.waves-effect.waves-light-grey(onclick="showPlayerPopup(this,'"+player.id+"')")
+          .list-row.valign-wrapper.waves-effect.waves-light-grey(onclick="showPlayerPopup(this,'"+player.id+"')")
             .player-seq.left #{player.seq}.
             .player-img.left
               - var url = "https://graph.facebook.com/"+player.id+"/picture";
