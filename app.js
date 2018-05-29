@@ -5,9 +5,13 @@ var mongoose = require('mongoose');
 var playerController = require('./controllers/players');
 var matchController = require('./controllers/matches');
 
-//mongoose.connect("mongodb://127.0.0.1:27017/mblwc");
-//mongoose.connect("mongodb://mblwc:mblwc@ds133550.mlab.com:33550/mblwc");
-mongoose.connect("mongodb://uezo1pgaabt2y1o:Aj3Ms6vC16UL7OKJjN56@bnjo0mjdq69bryf-mongodb.services.clever-cloud.com:27017/bnjo0mjdq69bryf");
+var db_url = "mongodb://127.0.0.1:27017/mblwc";
+if (process.env.APP_ENV==='PRD'){
+    db_url = "mongodb://mblwc:mblwc@ds133550.mlab.com:33550/mblwc";
+    //db_url = "mongodb://uezo1pgaabt2y1o:Aj3Ms6vC16UL7OKJjN56@bnjo0mjdq69bryf-mongodb.services.clever-cloud.com:27017/bnjo0mjdq69bryf";
+}
+console.log(db_url);
+mongoose.connect(db_url);
 var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
