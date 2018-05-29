@@ -7,8 +7,8 @@ var matchController = require('./controllers/matches');
 
 var db_url = "mongodb://127.0.0.1:27017/mblwc";
 if (process.env.APP_ENV==='PRD'){
-    db_url = "mongodb://mblwc:mblwc@ds133550.mlab.com:33550/mblwc";
-    //db_url = "mongodb://uezo1pgaabt2y1o:Aj3Ms6vC16UL7OKJjN56@bnjo0mjdq69bryf-mongodb.services.clever-cloud.com:27017/bnjo0mjdq69bryf";
+    //db_url = "mongodb://mblwc:mblwc@ds133550.mlab.com:33550/mblwc";
+    db_url = "mongodb://uezo1pgaabt2y1o:Aj3Ms6vC16UL7OKJjN56@bnjo0mjdq69bryf-mongodb.services.clever-cloud.com:27017/bnjo0mjdq69bryf";
 }
 console.log(db_url);
 mongoose.connect(db_url);
