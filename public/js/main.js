@@ -15,15 +15,20 @@ function resizeTabContent() {
 function showPlayerPopup(el,id) {
 	$('#popup_page').show().removeClass('slideOutLeft').addClass('slideInLeft');
 	var index = $("#ranking_tab div.list-row").index( el );
-	$('#popup_page a.brand-logo').html('Player Detail');
-    $("#popup_content").load('/player?player_id='+id+'&token='+getParameterByName('token'));
+    $('#popup_page a.brand-logo').html('Player Detail');    
+    $.LoadingOverlay("show");
+    $("#popup_content").load('/player?player_id='+id+'&token='+getParameterByName('token'),'', function() {
+        $.LoadingOverlay("hide");
+    });
 }
 
 function showMatchPopup(el,match_no) {
 	$('#popup_page').show().removeClass('slideOutLeft').addClass('slideInLeft');
 	var index = $("#schedule_tab div.list-row").index( el );
-	$('#popup_page a.brand-logo').html('Match Detail');
+    $('#popup_page a.brand-logo').html('Match Detail'); 
+    $.LoadingOverlay("show");
     $("#popup_content").load('/match?match_no='+match_no+'&token='+getParameterByName('token'),'',function() {
+        $.LoadingOverlay("hide");
         $('select').formSelect();        
     });
 }
