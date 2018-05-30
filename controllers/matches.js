@@ -18,24 +18,24 @@ exports.getMatches = async function(req, res, next) {
             return result.match_no===match.match_no;
         });
         var result_type = 0;
-        if (match.home_score==undefined) {
-            // no match result
-            result_type = 0;
-        } else if (!result) {
-            // no player result
-            result_type = 1;
-        } else if (result.home_score===match.home_score && result.away_score===match.away_score) {
-            // right score
-            result_type = 2;
-        } else {
-            if (result.home_score > result.away_score && match.home_score > match.away_score) {
-                result_type = 3;
-            } else if (result.home_score===result.away_score && match.home_score===match.away_score) {
-                result_type = 3;
-            } else if (result.home_score < result.away_score && match.home_score < match.away_score) {
-                result_type = 3;
+
+        if ( result!=undefined && 
+            result.home_score!=undefined && result.away_score!=undefined &&
+            match.home_score!=undefined && match.away_score!=undefined ) {
+            if ( result.home_score===match.home_score && 
+                result.away_score===match.away_score) {
+                // right score
+                result_type = 1;
             } else {
-                result_type = 4;
+                if (result.home_score > result.away_score && match.home_score > match.away_score) {
+                    result_type = 2;
+                } else if (result.home_score===result.away_score && match.home_score===match.away_score) {
+                    result_type = 2;
+                } else if (result.home_score < result.away_score && match.home_score < match.away_score) {
+                    result_type = 2;
+                } else {
+                    result_type = 3;
+                }
             }
         }
         return {

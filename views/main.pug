@@ -64,14 +64,14 @@ html
               div #{match.away_team_name}
             .match-result.col.s2.center-align
               .player-input-score
-                if match.result_type>=1
+                if match.result_home_score!=undefined
                   div #{match.result_home_score} - #{match.result_away_score}
               .match-action
-                if match.result_type===2
+                if match.result_type===1
                   img(src="/images/right_score.png")
-                else if match.result_type===3
+                else if match.result_type===2
                   img(src="/images/right_result.png")
-                else if match.result_type===4
+                else if match.result_type===3
                   img(src="/images/wrong_result.png")
                 else if moment().isBefore(match.start_timestamp) && match.result_type==0
                   i.material-icons mode_edit
