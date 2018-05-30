@@ -36,7 +36,7 @@ function loginFacebook() {
             FB.api('/me', function(info) {
                 $.post("/api/login", info, function(player, status){
                     if (player){
-                        location.href='/main?id='+player.id+'&token='+player.token;                        
+                        location.href='/main?token='+player.token;                        
                     }else{
                         $.LoadingOverlay("hide");
                     }

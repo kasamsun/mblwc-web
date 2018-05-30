@@ -2,7 +2,7 @@ var mongoose =  require('mongoose');
 
 var MatchSchema = new mongoose.Schema({
     match_no: {type: Number, unique: true, required: true},
-    group: {type: String, required: true},
+    match_type: {type: String, required: true},
     match_day: {type: Number, required: true},
     start_timestamp: {type: Date, required: true},
     home_team: {type: String, required: true},

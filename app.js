@@ -2,6 +2,7 @@ var express = require('express')
 var app = express()
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var jwt = require('jsonwebtoken');
 var playerController = require('./controllers/players');
 var matchController = require('./controllers/matches');
 
@@ -21,42 +22,86 @@ db.once('open', function () {
 });
 
 app.locals.moment = require('moment');
+app.locals._ = require('underscore');
 app.set('view engine', 'pug')
 app.use(express.static("./public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get(["/"], function (req, res) {  
+app.get(["/"], function (req, res, next) {  
     res.redirect('/signin');
 })
-app.get(["/signin"], function (req, res) {  
-    res.render(req.path.split("/").join(""),{})
+app.get(["/signin"], function (req, res, next) {  
+    res.render(req.path.split("/").join(""),{});
 })
-app.get(["/main"], async function (req, res) {
-    var result = await playerController.getPlayerRank(req,res);
-    var result2 = await matchController.getMatches(req,res);
-    result.matches = result2;
-    res.render(req.path.split("/").join(""),result);
+app.get(["/main"], async function (req, res, next) {
+    validateToken(req,res,next, async function() {
+        var result = await playerController.getPlayerRank(req,res,next);
+        var result2 = await matchController.getMatches(req,res,next);
+        result.matches = result2;
+        res.render(req.path.split("/").join(""),result);
+    });
 })
-
-app.get(["/test"], function (req, res) {  
-    res.render(req.path.split("/").join(""),{})
+app.get(["/match"], async function (req, res, next) { 
+    validateToken(req,res,next, async function() {
+        var matchInfo = await matchController.getMatchInfo(req,res,next);
+        res.render(req.path.split("/").join(""),matchInfo);
+    });
 })
-app.get(["/testanim"], function (req, res) {  
-    res.render(req.path.split("/").join(""),{})
+app.get(["/player"], async function (req, res, next) { 
+    validateToken(req,res,next, async function() { 
+        var playerInfo = await playerController.getPlayerInfo(req,res,next);
+        res.render(req.path.split("/").join(""),playerInfo);
+    });
 })
 app.post(["/api/login"], playerController.login)
+app.post(["/api/results"], async function (req, res, next) { 
+    validateToken(req,res,next, async function() { 
+        var result = await playerController.updateResult(req,res,next);
+        res.send(result);
+    });
+})
 
-app.use(errorHandler);
+app.use(function(err, req, res, next) {
+    if (req.path.indexOf("/api/")>=0) {
+        res.status(err.status || 500);
+        res.send({
+            error: {
+                message: err.message
+            }
+        });
+    } else {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: {}
+        });
+    }
+});
 
 app.listen(8080, function () {
     console.log('App listening on port 8080')
 })
 
-function errorHandler (err, req, res, next) {
-    res.status(500)
-    res.render('error', { error_message: err })
+function validateToken(req, res, next, callback) {
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if (token) {
+        jwt.verify(token,
+            (process.env.SECRET_KEY)?process.env.SECRET_KEY:'thisisakey',
+            function (err, payLoad) {
+                if (err) {
+                    return next(new Error('Validate token fail'));
+                } else {
+                    req.payLoad = payLoad;
+                    return callback();
+                }
+            });
+
+    } else {
+        return next(new Error('Valid token is required'));
+    }
 }
-  
+
+
 exports = module.exports = app;
 exports = module.exports = mongoose;

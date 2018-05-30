@@ -1,0 +1,109 @@
+#player_info
+  .row.valign-wrapper
+    .info-match.col.s6
+      div
+        | Match 
+        span #{match_no}
+        | #{match_type}
+    .col.s6.right-align #{moment(start_timestamp).format('D MMM YYYY k:mm')}
+
+  .row.valign-wrapper
+    .info-home-team.col.s4.center-align
+      - var url = "/images/"+home_team+".png";
+      img.large-circle-image.circle(src=url, alt=home_team)
+      div #{home_team_name}
+    .info-match-score.col.s4.center-align
+      if home_score!=undefined
+        .player-score #{home_score} - #{away_score}
+      if home_score_120!=undefined
+        .score-120 ex #{home_score_120} - #{away_score_120}
+      if home_score_pk!=undefined
+        .score-pk pk #{home_score_pk} - #{away_score_pk}
+    .info-away-team.col.s4.center-align
+      - var url = "/images/"+away_team+".png";
+      img.large-circle-image.circle(src=url, alt=away_team)
+      div #{away_team_name} 
+  .row
+    br
+    .seperate-line
+  .row
+    br
+    .col.s12.center-align Your score
+  .row
+    .col.s2
+    .col.s3.center-align
+      div #{home_team_name}      
+    .col.s2
+    .col.s3.center-align
+      div #{away_team_name}
+    .col.s2
+  .row
+    .col.s2
+    .input-field.col.s3.center-align.disabled
+      select#input_home_score
+        if result!=undefined
+          option(value='') Score
+          option(value='0',selected=result.home_score===0) 0
+          option(value='1',selected=result.home_score===1) 1
+          option(value='2',selected=result.home_score===2) 2
+          option(value='3',selected=result.home_score===3) 3
+          option(value='4',selected=result.home_score===4) 4
+          option(value='5',selected=result.home_score===5) 5
+          option(value='6',selected=result.home_score===6) 6
+          option(value='7',selected=result.home_score===7) 7
+          option(value='8',selected=result.home_score===8) 8
+          option(value='9',selected=result.home_score===9) 9
+        else
+          option(value='') Score
+          option(value='0') 0
+          option(value='1') 1
+          option(value='2') 2
+          option(value='3') 3
+          option(value='4') 4
+          option(value='5') 5
+          option(value='6') 6
+          option(value='7') 7
+          option(value='8') 8
+          option(value='9') 9
+    .col.s2  
+    .input-field.col.s3.center-align
+      select#input_away_score
+        if result!=undefined
+          option(value='',selected=!result.away_score) Score
+          option(value='0',selected=result.away_score===0) 0
+          option(value='1',selected=result.away_score===1) 1
+          option(value='2',selected=result.away_score===2) 2
+          option(value='3',selected=result.away_score===3) 3
+          option(value='4',selected=result.away_score===4) 4
+          option(value='5',selected=result.away_score===5) 5
+          option(value='6',selected=result.away_score===6) 6
+          option(value='7',selected=result.away_score===7) 7
+          option(value='8',selected=result.away_score===8) 8
+          option(value='9',selected=result.away_score===9) 9
+        else
+          option(value='') Score
+          option(value='0') 0
+          option(value='1') 1
+          option(value='2') 2
+          option(value='3') 3
+          option(value='4') 4
+          option(value='5') 5
+          option(value='6') 6
+          option(value='7') 7
+          option(value='8') 8
+          option(value='9') 9
+    .col.s2
+  .row
+    .col.s12.center-align 
+      div * When match start you can not save score
+  .row
+    if can_save==true
+      .col.s12 
+        .center-align
+          a(id="save_button",class="next waves-effect waves-light btn-large light-blue darken-1",onclick="saveScore('"+match_no+"')")="Save score"
+    else
+      .col.s12 
+        .center-align
+          a(id="save_button",class="next waves-effect waves-light disabled btn-large light-blue darken-1")="Save score"
+
+

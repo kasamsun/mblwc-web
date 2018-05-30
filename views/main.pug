@@ -43,14 +43,16 @@ html
         for match in matches
           .list-row.row.valign-wrapper.waves-effect.waves-light-grey(onclick="showMatchPopup(this,'"+match.match_no+"')")
             .match-seq.col.s1.center-align #{match.match_no}.
-              .match-date #{moment(match.start_timestamp).format('D/M')}
-              .match-date #{moment(match.start_timestamp).format('h:mm')}
+              .match-date.hide-on-med-and-up #{moment(match.start_timestamp).format('D/M')}
+              .match-date.hide-on-small-only #{moment(match.start_timestamp).format('D MMM')}
+              .match-date #{moment(match.start_timestamp).format('k:mm')}
             .match-team.col.s3.center-align
               - var url = "/images/"+match.home_team+".png";
               img.circle-image.circle(src=url, alt=match.home_team)
-              div #{match.home_team_name}       
+              div #{match.home_team_name}
             .match-score.col.s3.center-align
-              if match.home_score!=undefined  
+              .round #{match.match_type}
+              if match.home_score!=undefined
                 .score #{match.home_score} - #{match.away_score}
               if match.home_score_120!=undefined
                 .score-120 ex #{match.home_score_120} - #{match.away_score_120}
@@ -61,19 +63,22 @@ html
               img.circle-image.circle(src=url, alt=match.away_team)
               div #{match.away_team_name}
             .match-result.col.s2.center-align
-              if match.result_type>=1
-                .score #{match.result_home_score} - #{match.result_away_score}
+              .player-input-score
+                if match.result_type>=1
+                  div #{match.result_home_score} - #{match.result_away_score}
               .match-action
                 if match.result_type===2
                   img(src="/images/right_score.png")
                 else if match.result_type===3
                   img(src="/images/right_result.png")
                 else if match.result_type===4
-                  img(src="/images/wrong_result.png")  
+                  img(src="/images/wrong_result.png")
+                else if moment().isBefore(match.start_timestamp) && match.result_type==0
+                  i.material-icons mode_edit
           .list-line
 
       #standing_tab.col.s12
-        p Standing
+        p Under construction
         .row
           .col.s12
             p s12
