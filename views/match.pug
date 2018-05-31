@@ -29,8 +29,8 @@
   .row
     .col.s12.center-align Your score
   .row
-    .col.s3
-    .col.s2.center-align
+    .col.s2
+    .col.s3.center-align
       if can_save==true
         .input-field
           select#input_home_score
@@ -62,7 +62,7 @@
         .result-score #{result.home_score}
     .col.s2.center-align
         .result-score -
-    .col.s2.center-align
+    .col.s3.center-align
       if can_save==true
         .input-field
           select#input_away_score
@@ -92,7 +92,7 @@
               option(value='9') 9
       else if result!=undefined
         .result-score #{result.away_score}
-    .col.s3
+    .col.s2
   .row
     .col.s12.center-align 
       div * When match start you can not save score
@@ -105,5 +105,31 @@
       .col.s12 
         .center-align
           a(id="save_button",class="next waves-effect waves-light disabled btn-large light-blue darken-1")="Save score"
+  
+  .row
+    .seperate-line  
+  .row
+    .col.s4.center-align #{home_team_name} win 
+    .col.s4.center-align draw
+    .col.s4.center-align #{away_team_name} win 
+  .row
+    .col.s4.center-align #{sum_away_win} 
+    .col.s4.center-align #{sum_draw} 
+    .col.s4.center-align #{sum_away_win} 
+  .row.valign-wrapper
+    .col.s9 Number of right score 
+    .col.s3.right-align.valign-wrapper
+      span #{sum_right_score}  &nbsp;
+      img(src="/images/right_score.png")
+  .row.valign-wrapper
+    .col.s9 Number of right result 
+    .col.s3.right-align.valign-wrapper
+      span #{sum_right_result}  &nbsp;
+      img(src="/images/right_result.png")
+  .row.valign-wrapper
+    .col.s9 Number of wrong result 
+    .col.s3.right-align.valign-wrapper
+      span #{sum_wrong_result} &nbsp;
+      img(src="/images/wrong_result.png")
 
 

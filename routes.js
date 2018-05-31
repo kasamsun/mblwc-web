@@ -10,6 +10,9 @@ var router = express.Router();
 router.get(["/"], function (req, res, next) {  
     res.redirect('/signin');
 })
+router.get(["/help"], function (req, res, next) {  
+    res.render(req.path.split("/").join(""),{});
+})
 router.get(["/signin"], function (req, res, next) {  
     res.render(req.path.split("/").join(""),{});
 })

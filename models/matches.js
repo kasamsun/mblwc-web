@@ -15,6 +15,15 @@ var MatchSchema = new mongoose.Schema({
     away_score_120: {type: Number},
     home_score_pk: {type: Number},
     away_score_pk: {type: Number},
+
+    sum_home_win: {type: Number},
+    sum_draw: {type: Number},
+    sum_away_win: {type: Number},
+
+    sum_score: {type: Number},
+    sum_right_score: {type: Number},       
+    sum_right_result: {type: Number},    
+    sum_wrong_result: {type: Number}
   }, {
     collection: 'matches'  
 });

@@ -216,3 +216,9 @@ nav .brand-logo {
     margin-left:4px;
     margin-right:4px;
 }
+.modal-content {
+    padding:16px;
+}
+.modal-content i {
+    margin-right:8px;
+}

@@ -2,7 +2,15 @@
 $(document).ready(function() {
     $('.sidenav').sidenav();
     $('.tabs').tabs({swipeable:false});
-    resizeTabContent();
+    resizeTabContent();    
+    
+    $('.modal-trigger').click(function(){ 
+        var url = $('.modal-trigger').attr("data-source");
+        $.get( url, function( data ) {
+            $( ".modal-content" ).html(data);
+        });
+    });
+    $('.modal').modal();
 });
 
 function resizeTabContent() {
@@ -80,6 +88,6 @@ function saveScore(match_no) {
         });
     }
 }
-  
+
   
   

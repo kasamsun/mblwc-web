@@ -158,20 +158,19 @@ exports.calcAll = async function(req, res, next) {
 };
 
 exports.sumScore = async function(req, res, next) {  
-    console.log("sumScore");
+    console.log("sumPlayerScore");
     var results = await Result.aggregate([{
         $group: {
             _id: "$id",
             sum_score: { $sum: "$score"},
-            sum_right_score: { $sum: "$right_score"},        
-            sum_right_result: { $sum: "$right_result"},        
+            sum_right_score: { $sum: "$right_score"},
+            sum_right_result: { $sum: "$right_result"},
             sum_wrong_result: { $sum: "$wrong_result"}
         }
     }]).exec();
     
     for (let result of results) {
-        console.log(JSON.stringify(result));
-        await Player.update({
+        var n = await Player.update({
             id: result._id
         },{
             score: result.sum_score,
@@ -181,6 +180,60 @@ exports.sumScore = async function(req, res, next) {
             wrong_result: result.sum_wrong_result
         }).exec();
     }
+      
+    console.log("sumMatchScore");    
+    var results = await Result.aggregate([{
+        $group: {
+            _id: "$match_no",
+            sum_score: { $sum: "$score"},
+            sum_right_score: { $sum: "$right_score"},
+            sum_right_result: { $sum: "$right_result"},
+            sum_wrong_result: { $sum: "$wrong_result"}
+        }
+    }]).exec();
+    
+    for (let result of results) {
+        var n = await Match.update({
+            match_no: result._id
+        },{
+            sum_score: result.sum_score,
+            sum_right_score: result.sum_right_score,
+            sum_right_result: result.sum_right_result,
+            sum_wrong_result: result.sum_wrong_result
+        }).exec();
+    }
+
+    console.log("sumMatchPercent"); 
+    var results2 = await Result.aggregate([
+        {
+            $project: {
+                match_no: 1,
+                home_score: 1,
+                away_score: 1,
+                home_win: { $cond: [ { $gt: [ '$home_score', '$away_score' ] }, 1, 0 ]},
+                draw: { $cond: [ { $eq: [ '$home_score', '$away_score' ] }, 1, 0 ]},
+                away_win: { $cond: [ { $lt: [ '$home_score', '$away_score' ] }, 1, 0 ]}
+            }
+        },{
+            $group: {
+                _id: "$match_no",            
+                sum_home_win: { $sum: "$home_win"},
+                sum_draw: { $sum: "$draw"},
+                sum_away_win: { $sum: "$away_win"}
+            }
+        }
+    ]).exec();  
+    
+    for (let result of results2) {
+        var n = await Match.update({
+            match_no: result._id
+        },{
+            sum_home_win: result.sum_home_win,
+            sum_draw: result.sum_draw,
+            sum_away_win: result.sum_away_win
+        }).exec();
+    }
+
     return {
         message: "OK"
     };

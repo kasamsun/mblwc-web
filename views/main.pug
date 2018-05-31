@@ -7,6 +7,10 @@ html
           a.brand-logo.center(href='#') World Cup 2018
           a.sidenav-trigger.show-on-large(href='#', data-target='player_info')
             i.material-icons menu
+          ul.right
+            li
+              a.modal-trigger(href='#help_dialog', data-source="/help")
+                i.material-icons info_outline
         ul#main_tab.tabs
           li.tab.col.s3
             a.active(href='#ranking_tab') Ranking
@@ -130,4 +134,9 @@ html
 
       #popup_content.col.s12
     
+    #help_dialog.modal.modal-fixed-footer
+      .modal-content
+      .modal-footer
+        a.modal-close.waves-effect.waves-green.btn-flat(href='#!') Ok
+
     script(src="js/main.js",type="text/javascript")
