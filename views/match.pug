@@ -4,8 +4,9 @@
       div
         | Match 
         span #{match_no}
-        | #{match_type}
-    .col.s6.right-align #{moment(start_timestamp).format('D MMM YYYY k:mm')}
+    .col.s6.right-align 
+      div #{match_type}
+      div #{moment(start_timestamp).format('D MMM YYYY k:mm')}
 
   .row.valign-wrapper
     .info-home-team.col.s4.center-align
@@ -24,75 +25,74 @@
       img.large-circle-image.circle(src=url, alt=away_team)
       div #{away_team_name} 
   .row
-    br
     .seperate-line
   .row
-    br
     .col.s12.center-align Your score
   .row
-    .col.s2
-    .col.s3.center-align
-      div #{home_team_name}      
-    .col.s2
-    .col.s3.center-align
-      div #{away_team_name}
-    .col.s2
-  .row
-    .col.s2
-    .input-field.col.s3.center-align.disabled
-      select#input_home_score
-        if result!=undefined
-          option(value='') Score
-          option(value='0',selected=result.home_score===0) 0
-          option(value='1',selected=result.home_score===1) 1
-          option(value='2',selected=result.home_score===2) 2
-          option(value='3',selected=result.home_score===3) 3
-          option(value='4',selected=result.home_score===4) 4
-          option(value='5',selected=result.home_score===5) 5
-          option(value='6',selected=result.home_score===6) 6
-          option(value='7',selected=result.home_score===7) 7
-          option(value='8',selected=result.home_score===8) 8
-          option(value='9',selected=result.home_score===9) 9
-        else
-          option(value='') Score
-          option(value='0') 0
-          option(value='1') 1
-          option(value='2') 2
-          option(value='3') 3
-          option(value='4') 4
-          option(value='5') 5
-          option(value='6') 6
-          option(value='7') 7
-          option(value='8') 8
-          option(value='9') 9
-    .col.s2  
-    .input-field.col.s3.center-align
-      select#input_away_score
-        if result!=undefined
-          option(value='',selected=!result.away_score) Score
-          option(value='0',selected=result.away_score===0) 0
-          option(value='1',selected=result.away_score===1) 1
-          option(value='2',selected=result.away_score===2) 2
-          option(value='3',selected=result.away_score===3) 3
-          option(value='4',selected=result.away_score===4) 4
-          option(value='5',selected=result.away_score===5) 5
-          option(value='6',selected=result.away_score===6) 6
-          option(value='7',selected=result.away_score===7) 7
-          option(value='8',selected=result.away_score===8) 8
-          option(value='9',selected=result.away_score===9) 9
-        else
-          option(value='') Score
-          option(value='0') 0
-          option(value='1') 1
-          option(value='2') 2
-          option(value='3') 3
-          option(value='4') 4
-          option(value='5') 5
-          option(value='6') 6
-          option(value='7') 7
-          option(value='8') 8
-          option(value='9') 9
-    .col.s2
+    .col.s3
+    .col.s2.center-align
+      if can_save==true
+        .input-field
+          select#input_home_score
+            if result!=undefined
+              option(value='',disabled='')
+              option(value='0',selected=result.home_score===0) 0
+              option(value='1',selected=result.home_score===1) 1
+              option(value='2',selected=result.home_score===2) 2
+              option(value='3',selected=result.home_score===3) 3
+              option(value='4',selected=result.home_score===4) 4
+              option(value='5',selected=result.home_score===5) 5
+              option(value='6',selected=result.home_score===6) 6
+              option(value='7',selected=result.home_score===7) 7
+              option(value='8',selected=result.home_score===8) 8
+              option(value='9',selected=result.home_score===9) 9
+            else
+              option(value='',disabled='',selected='')
+              option(value='0') 0
+              option(value='1') 1
+              option(value='2') 2
+              option(value='3') 3
+              option(value='4') 4
+              option(value='5') 5
+              option(value='6') 6
+              option(value='7') 7
+              option(value='8') 8
+              option(value='9') 9
+      else
+        .result-score #{result.home_score}
+    .col.s2.center-align
+        .result-score -
+    .col.s2.center-align
+      if can_save==true
+        .input-field
+          select#input_away_score
+            if result!=undefined
+              option(value='',disabled='')
+              option(value='0',selected=result.away_score===0) 0
+              option(value='1',selected=result.away_score===1) 1
+              option(value='2',selected=result.away_score===2) 2
+              option(value='3',selected=result.away_score===3) 3
+              option(value='4',selected=result.away_score===4) 4
+              option(value='5',selected=result.away_score===5) 5
+              option(value='6',selected=result.away_score===6) 6
+              option(value='7',selected=result.away_score===7) 7
+              option(value='8',selected=result.away_score===8) 8
+              option(value='9',selected=result.away_score===9) 9
+            else
+              option(value='',disabled='',selected='')
+              option(value='0') 0
+              option(value='1') 1
+              option(value='2') 2
+              option(value='3') 3
+              option(value='4') 4
+              option(value='5') 5
+              option(value='6') 6
+              option(value='7') 7
+              option(value='8') 8
+              option(value='9') 9
+      else
+        .result-score #{result.away_score}
+    .col.s3
   .row
     .col.s12.center-align 
       div * When match start you can not save score
