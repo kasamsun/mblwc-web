@@ -2,6 +2,7 @@ var _ = require('underscore');
 var moment = require('moment');
 var Match = require('../models/matches');
 var Result = require('../models/results');
+var resultController = require('./results');
 
 exports.getMatches = async function(req, res, next) {
     if (!req.payLoad.id) {
@@ -17,30 +18,9 @@ exports.getMatches = async function(req, res, next) {
         var result = results.find((result)=>{
             return result.match_no===match.match_no;
         });
-        var result_type = 0;
-
-        if ( result!=undefined && 
-            result.home_score!=undefined && result.away_score!=undefined &&
-            match.home_score!=undefined && match.away_score!=undefined ) {
-            if ( result.home_score===match.home_score && 
-                result.away_score===match.away_score) {
-                // right score
-                result_type = 1;
-            } else {
-                if (result.home_score > result.away_score && match.home_score > match.away_score) {
-                    result_type = 2;
-                } else if (result.home_score===result.away_score && match.home_score===match.away_score) {
-                    result_type = 2;
-                } else if (result.home_score < result.away_score && match.home_score < match.away_score) {
-                    result_type = 2;
-                } else {
-                    result_type = 3;
-                }
-            }
-        }
         return {
             match_no: match.match_no,
-            match_type: getMatchTypeDesc(match.match_type),
+            match_type: this.getMatchTypeDesc(match.match_type),
             match_day: match.match_day,
             start_timestamp: match.start_timestamp,
             home_team: match.home_team,
@@ -55,7 +35,7 @@ exports.getMatches = async function(req, res, next) {
             away_score_pk: match.away_score_pk,
             result_home_score:(result)?result.home_score:undefined,
             result_away_score:(result)?result.away_score:undefined,
-            result_type: result_type
+            result_type: resultController.getResultType(match,result)
         }
     })
 };
@@ -72,7 +52,7 @@ exports.getMatchInfo = async function(req, res, next) {
         match_no: req.query.match_no,
         id: req.payLoad.id
     }).exec();
-    match.match_type = getMatchTypeDesc(match.match_type);
+    match.match_type = this.getMatchTypeDesc(match.match_type);
     if (result) {
         match.result = {
             home_score: result.home_score,
@@ -83,7 +63,7 @@ exports.getMatchInfo = async function(req, res, next) {
     return match;
 };
 
-function getMatchTypeDesc(match_type) {
+exports.getMatchTypeDesc = function(match_type) {
     if (_.contains(['A','B','C','D','E','F','G','H'],match_type)) {
         return 'Group ' + match_type;
     } else if ( match.match_type==='2' ) {

@@ -185,3 +185,28 @@ exports.sumScore = async function(req, res, next) {
         message: "OK"
     };
 };
+
+exports.getResultType = function(match,result) {
+    var result_type = 0;
+
+    if ( result!=undefined && 
+        result.home_score!=undefined && result.away_score!=undefined &&
+        match.home_score!=undefined && match.away_score!=undefined ) {
+        if ( result.home_score===match.home_score && 
+            result.away_score===match.away_score) {
+            // right score
+            result_type = 1;
+        } else {
+            if (result.home_score > result.away_score && match.home_score > match.away_score) {
+                result_type = 2;
+            } else if (result.home_score===result.away_score && match.home_score===match.away_score) {
+                result_type = 2;
+            } else if (result.home_score < result.away_score && match.home_score < match.away_score) {
+                result_type = 2;
+            } else {
+                result_type = 3;
+            }
+        }
+    }
+    return result_type
+};

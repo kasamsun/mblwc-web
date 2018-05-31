@@ -26,9 +26,9 @@
   for match in matches
     .list-row.row.valign-wrapper.waves-effect.waves-light-grey
       .match-seq.col.s1.center-align #{match.match_no}.
-        .match-date.hide-on-med-and-up #{moment(match.start_timestamp).format('D/M')}
-        .match-date.hide-on-small-only #{moment(match.start_timestamp).format('D MMM')}
-        .match-date #{moment(match.start_timestamp).format('k:mm')}
+        .match-date.hide-on-med-and-up #{moment(match.start_timestamp).utcOffset('+0700').format('D/M')}
+        .match-date.hide-on-small-only #{moment(match.start_timestamp).utcOffset('+0700').format('D MMM')}
+        .match-date #{moment(match.start_timestamp).utcOffset('+0700').format('k:mm')}
       .match-team.col.s3.center-align
         - var url = "/images/"+match.home_team+".png";
         img.circle-image.circle(src=url, alt=match.home_team)

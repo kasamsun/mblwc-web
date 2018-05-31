@@ -5,6 +5,8 @@ const uuidv1 = require('uuid/v1');
 var moment = require('moment');
 var _ = require('underscore');
 var jwt = require('jsonwebtoken');
+var matchController = require('./matches');
+var resultController = require('./results');
 
 exports.login = function(req, res, next) {
     var newPlayer;
@@ -67,6 +69,13 @@ exports.login = function(req, res, next) {
             }
         }
     });
+};
+
+exports.getPlayerRankAndMatches = async function(req, res, next) {    
+    var result = await this.getPlayerRank(req,res,next);
+    var result2 = await matchController.getMatches(req,res,next);
+    result.matches = result2;
+    return result;
 };
 
 exports.getPlayerRank = async function(req, res, next) {
@@ -142,32 +151,10 @@ exports.getPlayerInfo = async function(req, res, next) {
     matches = matches.map((match)=>{
         var result = results.find((result)=>{
             return result.match_no===match.match_no;
-        });
-        var result_type = 0;
-
-        if ( result!=undefined && 
-            result.home_score!=undefined && result.away_score!=undefined &&
-            match.home_score!=undefined && match.away_score!=undefined ) {
-            if ( result.home_score===match.home_score && 
-                result.away_score===match.away_score) {
-                // right score
-                result_type = 1;
-            } else {
-                if (result.home_score > result.away_score && match.home_score > match.away_score) {
-                    result_type = 2;
-                } else if (result.home_score===result.away_score && match.home_score===match.away_score) {
-                    result_type = 2;
-                } else if (result.home_score < result.away_score && match.home_score < match.away_score) {
-                    result_type = 2;
-                } else {
-                    result_type = 3;
-                }
-            }
-        }
-        
+        });        
         return {
             match_no: match.match_no,
-            match_type: getMatchTypeDesc(match.match_type),
+            match_type: matchController.getMatchTypeDesc(match.match_type),
             match_day: match.match_day,
             start_timestamp: match.start_timestamp,
             home_team: match.home_team,
@@ -182,7 +169,7 @@ exports.getPlayerInfo = async function(req, res, next) {
             away_score_pk: match.away_score_pk,
             result_home_score:(result)?result.home_score:undefined,
             result_away_score:(result)?result.away_score:undefined,
-            result_type: result_type
+            result_type: resultController.getResultType(match,result)
         }
     });
     
@@ -196,20 +183,3 @@ exports.getPlayerInfo = async function(req, res, next) {
         matches: matches
     }
 };
-
-function getMatchTypeDesc(match_type) {
-    if (_.contains(['A','B','C','D','E','F','G','H'],match_type)) {
-        return 'Group ' + match_type;
-    } else if ( match.match_type==='2' ) {
-        return 'Round of 16';
-    } else if ( match.match_type==='Q' ) {
-        return 'Quarter Finals';
-    } else if ( match.match_type==='S' ) {
-        return 'Semi-Finals';
-    } else if ( match.match_type==='3' ) {
-        return '3rd Place';
-    } else if ( match.match_type==='F' ) {
-        return 'Final';
-    }
-    return '';
-}

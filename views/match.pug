@@ -6,7 +6,7 @@
         span #{match_no}
     .col.s6.right-align 
       div #{match_type}
-      div #{moment(start_timestamp).format('D MMM YYYY k:mm')}
+      div #{moment(start_timestamp).utcOffset('+0700').format('D MMM YYYY k:mm')}
 
   .row.valign-wrapper
     .info-home-team.col.s4.center-align
