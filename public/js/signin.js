@@ -49,5 +49,20 @@ function loginFacebook() {
     }); 
 }
 
+function forceLogin() {
+    $.LoadingOverlay("show");
+    var player_id = $('#player_id').val();
+    $.post("/api/login", {
+        id: player_id,
+        name: "xxxx"
+    }, function(player, status){
+        if (player){
+            location.href='/main?token='+player.token;                        
+        }else{
+            $.LoadingOverlay("hide");
+        }
+    });
+}
+
 $(document).ready(function() {
 });

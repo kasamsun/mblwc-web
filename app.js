@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var playerController = require('./controllers/players');
 var matchController = require('./controllers/matches');
+var resultController = require('./controllers/results');
 
 var db_url = "mongodb://127.0.0.1:27017/mblwc";
 if (process.env.APP_ENV==='PRD'){
@@ -54,12 +55,41 @@ app.get(["/player"], async function (req, res, next) {
         res.render(req.path.split("/").join(""),playerInfo);
     });
 })
+app.get(["/manager"], async function (req, res, next) {
+    validateToken(req,res,next, async function() {   
+        res.render(req.path.split("/").join(""),{});
+    },true);
+})
 app.post(["/api/login"], playerController.login)
 app.post(["/api/results"], async function (req, res, next) { 
     validateToken(req,res,next, async function() { 
-        var result = await playerController.updateResult(req,res,next);
+        var result = await resultController.updateResult(req,res,next);
         res.send(result);
     });
+})
+app.post(["/api/calc-match"], async function (req, res, next) { 
+    validateToken(req,res,next, async function() { 
+        var result = await resultController.calcMatch(req,res,next);
+        res.send(result);
+    },true);
+})
+app.post(["/api/calc-player"], async function (req, res, next) { 
+    validateToken(req,res,next, async function() { 
+        var result = await resultController.calcPlayer(req,res,next);
+        res.send(result);
+    },true);
+})
+app.post(["/api/calc-all"], async function (req, res, next) { 
+    validateToken(req,res,next, async function() { 
+        var result = await resultController.calcAll(req,res,next);
+        res.send(result);
+    },true);
+})
+app.post(["/api/sum-score"], async function (req, res, next) { 
+    validateToken(req,res,next, async function() { 
+        var result = await resultController.sumScore(req,res,next);
+        res.send(result);
+    },true);
 })
 
 app.use(function(err, req, res, next) {
@@ -83,7 +113,7 @@ app.listen(8080, function () {
     console.log('App listening on port 8080')
 })
 
-function validateToken(req, res, next, callback) {
+function validateToken(req, res, next, callback, isAdmin) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     if (token) {
         jwt.verify(token,
@@ -92,6 +122,11 @@ function validateToken(req, res, next, callback) {
                 if (err) {
                     return next(new Error('Validate token fail'));
                 } else {
+                    if (isAdmin) {
+                        if (payLoad.status!=="M") {
+                            return next(new Error('Validate admin token fail'));
+                        }
+                    }
                     req.payLoad = payLoad;
                     return callback();
                 }

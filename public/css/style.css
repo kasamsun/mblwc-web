@@ -85,6 +85,9 @@ nav .nav-wrapper .back-button i {
     font-size:28px;
     margin-right:8px;
 }
+.my-player {
+    background-color: #dff2fa;
+}
 .list-line{
     margin-left:80px;
     padding: 0 30px 0 30px;
@@ -152,7 +155,7 @@ nav .brand-logo {
     margin-top:8px;
 }
 #player_info {
-    padding: 2px 16px 16px 16px;
+    padding: 8px 16px 16px 16px ;
     font-size: 14px;
 }
 .info-home-team {
@@ -203,4 +206,13 @@ nav .brand-logo {
 }
 .result-score {
     font-size:24px;
+}
+.profile-score {
+    font-size:48px;
+}
+.profile-score-detail {
+}
+.profile-score-detail img{
+    margin-left:4px;
+    margin-right:4px;
 }

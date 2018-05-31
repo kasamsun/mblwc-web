@@ -17,16 +17,36 @@ html
 
       ul#player_info.sidenav
         li
-          .valign-wrapper
-            - var url = "https://graph.facebook.com/"+id+"/picture";
-            img.circle-image.circle(src=url)
-            span=name
+          div
+            .valign-wrapper
+              - var url = "https://graph.facebook.com/"+id+"/picture";
+              img.large-circle-image.circle(src=url)
+              span=name              
+            .seperate-line
+            .profile-date.left #{moment(today).format('D MMM YYYY')} 
+            .profile-date.right &nbsp; points
+            .profile-score.right #{score}
+            .clearfix
+            .profile-score-detail.right.valign-wrapper 
+              - var play = right_score+right_result+wrong_result
+              | Play #{play}
+              | &nbsp;&nbsp;&nbsp;
+              | #{right_score}
+              img(src="/images/right_score.png")
+              | #{right_result}
+              img(src="/images/right_result.png")
+              | #{wrong_result}
+              img(src="/images/wrong_result.png")            
+            .clearfix
+            .seperate-line
         li
-          a(href='./signin') Logout
+          a(href='./signin')
+            i.material-icons exit_to_app 
+            | Logout
 
       #ranking_tab.col.s12          
         for player in players
-          .list-row.row.valign-wrapper.waves-effect.waves-light-grey(onclick="showPlayerPopup(this,'"+player.id+"')")
+          .list-row.row.valign-wrapper.waves-effect.waves-light-grey(onclick="showPlayerPopup(this,'"+player.id+"')",style=(player.id===id)?'background-color: #dff2fa;':'')
             .player-seq.col.s1.right-align #{player.seq}.
             .player-img.col.s2.right-align
               - var url = "https://graph.facebook.com/"+player.id+"/picture";
@@ -38,6 +58,7 @@ html
                 img(src=url) 
             .player-score.col.s2.right-align #{player.score}
           .list-line
+        br
 
       #schedule_tab.col.s12
         for match in matches
@@ -76,6 +97,7 @@ html
                 else if moment().isBefore(match.start_timestamp) && match.result_type==0
                   i.material-icons mode_edit
           .list-line
+        br
 
       #standing_tab.col.s12
         p Under construction

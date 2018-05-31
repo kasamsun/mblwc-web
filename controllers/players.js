@@ -1,7 +1,9 @@
 var Player = require('../models/players');
+var Match = require('../models/matches');
 var Result = require('../models/results');
 const uuidv1 = require('uuid/v1');
 var moment = require('moment');
+var _ = require('underscore');
 var jwt = require('jsonwebtoken');
 
 exports.login = function(req, res, next) {
@@ -12,21 +14,38 @@ exports.login = function(req, res, next) {
     
     Player.findOne({id:req.body.id}, function(err,player) {
         if (!err) {
-            var payLoad = {
-                id: req.body.id,
-                last_login: moment()
-            }
-            var token = jwt.sign(payLoad,(process.env.SECRET_KEY)?process.env.SECRET_KEY:'thisisakey');
+
             if (player){
-                player.token = token;
+                // Existing player
+                var payLoad = {
+                    id: player.id,
+                    last_login: moment(),
+                    status: player.player_status
+                }
+                var token = jwt.sign(payLoad,
+                    (process.env.SECRET_KEY)?process.env.SECRET_KEY:'thisisakey');
+                    player.token = token;
+                player.last_login = payLoad.last_login;
                 newPlayer = player;
                 Player.update({
-                    _id:player._id,
-                    last_login:payLoad.last_login
+                    _id:player._id
                 }, player, function(err,num) {
-                    res.send(newPlayer);
+                    if (!err) {
+                        if (num.n>0) {
+                            console.log("Login " + newPlayer.id);
+                        }
+                        res.send(newPlayer);
+                    }
                 });
             }else{
+                // New player
+                var payLoad = {
+                    id: req.body.id,
+                    last_login: moment(),
+                    player_status: "A"
+                }
+                var token = jwt.sign(payLoad,
+                    (process.env.SECRET_KEY)?process.env.SECRET_KEY:'thisisakey');
                 Player.create({
                     id: req.body.id,
                     name: req.body.name,
@@ -35,11 +54,13 @@ exports.login = function(req, res, next) {
                     play: 0,
                     right_score: 0,
                     right_result: 0,
-                    wrong_result: 0,                    
+                    wrong_result: 0, 
+                    player_status: "A",                   
                     last_login:payLoad.last_login
                 }, function (err, player) {
                     if (!err) {
                         newPlayer = player;
+                        console.log("New player login " + player.id);
                         res.send(newPlayer);
                     }
                 });
@@ -53,7 +74,12 @@ exports.getPlayerRank = async function(req, res, next) {
         return next(new Error('payLoad.id is required'));
     }
     
-    var players = await Player.find({}).sort({score:-1}).exec();
+    // PRODUCTION find with player status A
+    var players = await Player.find({
+        player_status:{
+            $in:["A","D","M"]
+        }
+    }).sort({score:-1}).exec();
     var myplayer = players.find((player)=>{
         return player.id===req.payLoad.id;
     })
@@ -62,6 +88,11 @@ exports.getPlayerRank = async function(req, res, next) {
         id: myplayer.id,
         name: myplayer.name,
         score: myplayer.score,
+        play: myplayer.play,
+        right_score: myplayer.right_score,
+        right_result: myplayer.right_result,
+        wrong_result: myplayer.wrong_result,
+        today: moment(),
         players: players.map((player) => {
             return {
                 seq: ++seqNo,
@@ -74,44 +105,111 @@ exports.getPlayerRank = async function(req, res, next) {
     }
 };
 
-exports.updateResult = async function(req, res, next) {
-    if (!req.payLoad.id) {
-        return next(new Error('payLoad.id is required'));
-    }
-    if (!req.body.match_no) {
-        return next(new Error('match_no is required'));
-    }
-    if (!req.body.home_score) {
-        return next(new Error('home_score is required'));
-    }
-    if (!req.body.away_score) {
-        return next(new Error('away_score is required'));
-    }
-    
-    var result = await Result.findOneAndUpdate({
-        id: req.payLoad.id,
-        match_no: req.body.match_no
-    },{
-        home_score: req.body.home_score,
-        away_score: req.body.away_score
-    },{upsert: true, 'new': true}).exec();
-    
-    res.send({
-        id: result.id,
-        match_no: result.match_no,
-        home_score: result.home_score,
-        away_score: result.away_score
-    });
-};
-
-exports.getPlayerInfo = function(req, res, next) {
+exports.getPlayerInfo = async function(req, res, next) {
     if (!req.payLoad.id) {
         return next(new Error('payLoad.id is required'));
     }
     if (!req.query.player_id) {
         return next(new Error('player_id is required'));
     }
-    return {
+    
+    var player = await Player.findOne({
         id: req.query.player_id
+    }).exec();
+    
+    if (!player) {
+        return next(new Error('player_id not found'));
+    }
+    
+    var matches = await Match.find({
+        home_score: {
+            $exists: true
+        }
+    }).sort({match_no:1}).exec();
+    
+    var maxMatch = undefined;
+    if (matches.length>0) {
+        maxMatch = matches[matches.length-1].match_no;
+    }
+    
+    var results = await Result.find({
+        id:req.query.player_id,
+        match_no: {
+            $lte: maxMatch
+        }
+    }).sort({match_no:1}).exec();
+
+    matches = matches.map((match)=>{
+        var result = results.find((result)=>{
+            return result.match_no===match.match_no;
+        });
+        var result_type = 0;
+
+        if ( result!=undefined && 
+            result.home_score!=undefined && result.away_score!=undefined &&
+            match.home_score!=undefined && match.away_score!=undefined ) {
+            if ( result.home_score===match.home_score && 
+                result.away_score===match.away_score) {
+                // right score
+                result_type = 1;
+            } else {
+                if (result.home_score > result.away_score && match.home_score > match.away_score) {
+                    result_type = 2;
+                } else if (result.home_score===result.away_score && match.home_score===match.away_score) {
+                    result_type = 2;
+                } else if (result.home_score < result.away_score && match.home_score < match.away_score) {
+                    result_type = 2;
+                } else {
+                    result_type = 3;
+                }
+            }
+        }
+        
+        return {
+            match_no: match.match_no,
+            match_type: getMatchTypeDesc(match.match_type),
+            match_day: match.match_day,
+            start_timestamp: match.start_timestamp,
+            home_team: match.home_team,
+            away_team: match.away_team,
+            home_team_name: match.home_team_name,
+            away_team_name: match.away_team_name,
+            home_score: match.home_score,
+            away_score: match.away_score,
+            home_score_120: match.home_score_120,
+            away_score_120: match.away_score_120,
+            home_score_pk: match.home_score_pk,
+            away_score_pk: match.away_score_pk,
+            result_home_score:(result)?result.home_score:undefined,
+            result_away_score:(result)?result.away_score:undefined,
+            result_type: result_type
+        }
+    });
+    
+    return {
+        id: req.query.player_id,
+        name: player.name,
+        score: player.score,
+        right_score: player.right_score,
+        right_result: player.right_result,
+        wrong_result: player.wrong_result,
+        matches: matches
     }
 };
+
+function getMatchTypeDesc(match_type) {
+    if (_.contains(['A','B','C','D','E','F','G','H'],match_type)) {
+        return 'Group ' + match_type;
+    } else if ( match.match_type==='2' ) {
+        return 'Round of 16';
+    } else if ( match.match_type==='Q' ) {
+        return 'Quarter Finals';
+    } else if ( match.match_type==='S' ) {
+        return 'Semi-Finals';
+    } else if ( match.match_type==='3' ) {
+        return '3rd Place';
+    } else if ( match.match_type==='F' ) {
+        return 'Final';
+    }
+    return '';
+}

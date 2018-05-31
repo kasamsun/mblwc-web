@@ -50,7 +50,9 @@ function getParameterByName(name, url) {
 function saveScore(match_no) {
     var home_score = $('#input_home_score').val();
     var away_score = $('#input_away_score').val();
-    if (home_score.length===0 || away_score.length===0) {
+    if (
+        home_score===null || away_score===null ||
+        home_score.length===0 || away_score.length===0) {
         M.toast({html: 'Please put valid scores', classes: 'rounded'});
 
     } else {        

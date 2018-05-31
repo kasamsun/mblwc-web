@@ -1,2 +1,61 @@
 #player_info
-  div Player Information here [#{id}]
+  .valign-wrapper
+    - var url = "https://graph.facebook.com/"+id+"/picture";
+    img.large-circle-image.circle(src=url)
+    span=name
+  .row.valign-wrapper
+    .col.s8
+      .profile-score-detail 
+        .valign-wrapper
+          - var play = right_score+right_result+wrong_result
+          | Play #{play}
+          | &nbsp;&nbsp;&nbsp;
+          | #{right_score}
+          img(src="/images/right_score.png")
+          | #{right_result}
+          img(src="/images/right_result.png")
+          | #{wrong_result}
+          img(src="/images/wrong_result.png")  
+    .col.s4
+      div.valign-wrapper
+        span.profile-score #{score}
+        | &nbsp; points 
+
+  .seperate-line
+
+  for match in matches
+    .list-row.row.valign-wrapper.waves-effect.waves-light-grey
+      .match-seq.col.s1.center-align #{match.match_no}.
+        .match-date.hide-on-med-and-up #{moment(match.start_timestamp).format('D/M')}
+        .match-date.hide-on-small-only #{moment(match.start_timestamp).format('D MMM')}
+        .match-date #{moment(match.start_timestamp).format('k:mm')}
+      .match-team.col.s3.center-align
+        - var url = "/images/"+match.home_team+".png";
+        img.circle-image.circle(src=url, alt=match.home_team)
+        div #{match.home_team_name}
+      .match-score.col.s3.center-align
+        .round #{match.match_type}
+        if match.home_score!=undefined
+          .score #{match.home_score} - #{match.away_score}
+        if match.home_score_120!=undefined
+          .score-120 ex #{match.home_score_120} - #{match.away_score_120}
+        if match.home_score_pk!=undefined
+          .score-pk pk #{match.home_score_pk} - #{match.away_score_pk}
+      .match-team.col.s3.center-align
+        - var url = "/images/"+match.away_team+".png";
+        img.circle-image.circle(src=url, alt=match.away_team)
+        div #{match.away_team_name}
+      .match-result.col.s2.center-align
+        .player-input-score
+          if match.result_home_score!=undefined
+            div #{match.result_home_score} - #{match.result_away_score}
+        .match-action
+          if match.result_type===1
+            img(src="/images/right_score.png")
+          else if match.result_type===2
+            img(src="/images/right_result.png")
+          else if match.result_type===3
+            img(src="/images/wrong_result.png")
+    .list-line
+br
+br

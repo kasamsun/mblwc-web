@@ -8,7 +8,9 @@ var PlayerSchema = new mongoose.Schema({
     play: {type: Number, required: true},
     right_score: {type: Number, required: true},
     right_result: {type: Number, required: true},
-    wrong_result: {type: Number, required: true}
+    wrong_result: {type: Number, required: true},
+    player_status: {type: String},
+    last_login: {type: Date}
   }, {
     collection: 'players'  
 });
