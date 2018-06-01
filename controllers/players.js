@@ -141,37 +141,60 @@ exports.getPlayerInfo = async function(req, res, next) {
         maxMatch = matches[matches.length-1].match_no;
     }
     
-    var results = await Result.find({
-        id:req.query.player_id,
-        match_no: {
-            $lte: maxMatch
-        }
-    }).sort({match_no:1}).exec();
-
-    matches = matches.map((match)=>{
-        var result = results.find((result)=>{
-            return result.match_no===match.match_no;
-        });        
-        return {
-            match_no: match.match_no,
-            match_type: matchController.getMatchTypeDesc(match.match_type),
-            match_day: match.match_day,
-            start_timestamp: match.start_timestamp,
-            home_team: match.home_team,
-            away_team: match.away_team,
-            home_team_name: match.home_team_name,
-            away_team_name: match.away_team_name,
-            home_score: match.home_score,
-            away_score: match.away_score,
-            home_score_120: match.home_score_120,
-            away_score_120: match.away_score_120,
-            home_score_pk: match.home_score_pk,
-            away_score_pk: match.away_score_pk,
-            result_home_score:(result)?result.home_score:undefined,
-            result_away_score:(result)?result.away_score:undefined,
-            result_type: resultController.getResultType(match,result)
-        }
-    });
+    if (maxMatch) {
+        
+        var results = await Result.find({
+            id:req.query.player_id,
+            match_no: {
+                $lte: maxMatch
+            }
+        }).sort({match_no:1}).exec();
+    
+        matches = matches.map((match)=>{
+            var result = results.find((result)=>{
+                return result.match_no===match.match_no;
+            });        
+            return {
+                match_no: match.match_no,
+                match_type: matchController.getMatchTypeDesc(match.match_type),
+                match_day: match.match_day,
+                start_timestamp: match.start_timestamp,
+                home_team: match.home_team,
+                away_team: match.away_team,
+                home_team_name: match.home_team_name,
+                away_team_name: match.away_team_name,
+                home_score: match.home_score,
+                away_score: match.away_score,
+                home_score_120: match.home_score_120,
+                away_score_120: match.away_score_120,
+                home_score_pk: match.home_score_pk,
+                away_score_pk: match.away_score_pk,
+                result_home_score:(result)?result.home_score:undefined,
+                result_away_score:(result)?result.away_score:undefined,
+                result_type: resultController.getResultType(match,result)
+            }
+        });
+    } else {
+        matches = matches.map((match)=>{
+            return {
+                match_no: match.match_no,
+                match_type: matchController.getMatchTypeDesc(match.match_type),
+                match_day: match.match_day,
+                start_timestamp: match.start_timestamp,
+                home_team: match.home_team,
+                away_team: match.away_team,
+                home_team_name: match.home_team_name,
+                away_team_name: match.away_team_name,
+                home_score: match.home_score,
+                away_score: match.away_score,
+                home_score_120: match.home_score_120,
+                away_score_120: match.away_score_120,
+                home_score_pk: match.home_score_pk,
+                away_score_pk: match.away_score_pk,
+                result_type: 0
+            }
+        });
+    }
     
     return {
         id: req.query.player_id,
