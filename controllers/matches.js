@@ -60,6 +60,25 @@ exports.getMatchInfo = async function(req, res, next) {
         }
     }
     match.can_save = moment().isBefore(match.start_timestamp)
+    
+    var play = match.sum_home_win+match.sum_draw+match.sum_away_win;
+    if ( play>0 ) {
+        var play = match.sum_home_win+match.sum_draw+match.sum_away_win;
+        match.sum_home_win_perc = (match.sum_home_win * 100 / play).toFixed(0);
+        match.sum_draw_perc = (match.sum_draw * 100 / play).toFixed(0);
+        match.sum_away_win_perc = (match.sum_away_win * 100 / play).toFixed(0);
+        match.sum_right_score_perc = (match.sum_right_score * 100 / play).toFixed(0);
+        match.sum_right_result_perc = (match.sum_right_result * 100 / play).toFixed(0);
+        match.sum_wrong_result_perc = (match.sum_wrong_result * 100 / play).toFixed(0);
+    } else {
+        match.sum_home_win_perc = 0;
+        match.sum_draw_perc = 0;
+        match.sum_away_win_perc = 0;
+        match.sum_right_score_perc = 0;
+        match.sum_right_result_perc = 0;
+        match.sum_wrong_result_perc = 0;
+    }
+
     return match;
 };
 
