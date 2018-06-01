@@ -21,28 +21,27 @@ html
 
       ul#player_info.sidenav
         li
-          div
-            .valign-wrapper
-              - var url = "https://graph.facebook.com/"+id+"/picture";
-              img.large-circle-image.circle(src=url)
-              span=name              
-            .seperate-line
-            .profile-date.left #{moment(today).utcOffset('+0700').format('D MMM YYYY')} 
-            .profile-date.right &nbsp; points
-            .profile-score.right #{score}
-            .clearfix
-            .profile-score-detail.right.valign-wrapper 
-              - var play = right_score+right_result+wrong_result
-              | Play #{play}
-              | &nbsp;&nbsp;&nbsp;
-              | #{right_score}
-              img(src="/images/right_score.png")
-              | #{right_result}
-              img(src="/images/right_result.png")
-              | #{wrong_result}
-              img(src="/images/wrong_result.png")            
-            .clearfix
-            .seperate-line
+          div.valign-wrapper
+            - var url = "https://graph.facebook.com/"+id+"/picture";
+            img.large-circle-image.circle(src=url)
+            span=name              
+          .seperate-line
+          .profile-date.left #{moment(today).utcOffset('+0700').format('D MMM YYYY')} 
+          .profile-date.right &nbsp; points
+          .profile-score.right #{score}
+          .clearfix
+          .profile-score-detail.right.valign-wrapper 
+            - var play = right_score+right_result+wrong_result
+            | Play #{play}
+            | &nbsp;&nbsp;&nbsp;
+            | #{right_score}
+            img(src="/images/right_score.png")
+            | #{right_result}
+            img(src="/images/right_result.png")
+            | #{wrong_result}
+            img(src="/images/wrong_result.png")            
+          .clearfix
+          .seperate-line
         li
           a(href='./signin')
             i.material-icons exit_to_app 

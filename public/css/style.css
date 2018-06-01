@@ -4,9 +4,9 @@ html,body{
 	overflow: hidden;
 }
 #login_button {
-    margin-top:80px;
+    margin-top:40px;
 }
-#message_info {
+.sign-in-header {
     padding:24px;
 }
 #main_tab {
@@ -18,6 +18,9 @@ nav {
 nav .nav-wrapper .back-button i {
     margin-left:16px;
     cursor:pointer;
+}
+.sidenav li > a {
+    padding: 0px;
 }
 .tabs .tab a {
     color:#7ec6e8;

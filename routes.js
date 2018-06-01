@@ -16,6 +16,9 @@ router.get(["/help"], function (req, res, next) {
 router.get(["/signin"], function (req, res, next) {  
     res.render(req.path.split("/").join(""),{});
 })
+router.get(["/signin2"], function (req, res, next) {  
+    res.render(req.path.split("/").join(""),{});
+})
 router.get(["/main"], async function (req, res, next) {
     validateToken(req,res,next, async function() {
         res.render(req.path.split("/").join(""),

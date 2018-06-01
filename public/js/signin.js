@@ -64,5 +64,13 @@ function forceLogin() {
     });
 }
 
-$(document).ready(function() {
+$(document).ready(function() { 
+    
+    $('.modal-trigger').click(function(){ 
+        var url = $('.modal-trigger').attr("data-source");
+        $.get( url, function( data ) {
+            $( ".modal-content" ).html(data);
+        });
+    });
+    $('.modal').modal();
 });
