@@ -35,7 +35,6 @@ function loginFacebook() {
         if(response.authResponse){
             doLogin();
         }else{
-            $.LoadingOverlay("hide");
             FB.login(function(response){
                 doLogin();
             });
