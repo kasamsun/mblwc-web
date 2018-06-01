@@ -33,20 +33,27 @@ function loginFacebook() {
     $.LoadingOverlay("show");
     FB.getLoginStatus(function(response) {
         if(response.authResponse){
-            FB.api('/me', function(info) {
-                $.post("/api/login", info, function(player, status){
-                    if (player){
-                        location.href='/main?token='+player.token;                        
-                    }else{
-                        $.LoadingOverlay("hide");
-                    }
-                });
-            });
+            doLogin();
         }else{
             $.LoadingOverlay("hide");
-            FB.login();
+            FB.login(function(response){
+                doLogin();
+            });
+            
         }
     }); 
+}
+
+function doLogin() {
+    FB.api('/me', function(info) {
+        $.post("/api/login", info, function(player, status){
+            if (player){
+                location.href='/main?token='+player.token;                        
+            }else{
+                $.LoadingOverlay("hide");
+            }
+        });
+    });
 }
 
 function forceLogin() {
