@@ -84,6 +84,11 @@ function saveScore(match_no) {
                 );
                 M.toast({html: 'Your score is saved', classes: 'rounded'});
                 closePopup();
+            },
+            error: function(data){
+                err = JSON.parse(data.responseText);
+                M.toast({html: err.error.message , classes: 'rounded'});
+                $.LoadingOverlay("hide");
             }
         });
     }

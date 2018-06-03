@@ -31,7 +31,12 @@ function calcMatch() {
         dataType: 'json',
         success: function(result) {                
             $.LoadingOverlay("hide");
-            M.toast({html: result.message, classes: 'rounded'});
+            M.toast({html: "Complete", classes: 'rounded'});
+        },
+        error: function(data){
+            err = JSON.parse(data.responseText);
+            M.toast({html: err.error.message, classes: 'rounded'});
+            $.LoadingOverlay("hide");
         }
     });
 
@@ -55,7 +60,12 @@ function calcPlayer() {
         dataType: 'json',
         success: function(result) {                
             $.LoadingOverlay("hide");
-            M.toast({html: result.message, classes: 'rounded'});
+            M.toast({html: "Complete", classes: 'rounded'});
+        },
+        error: function(data){
+            err = JSON.parse(data.responseText);
+            M.toast({html: err.error.message , classes: 'rounded'});
+            $.LoadingOverlay("hide");
         }
     });
     
@@ -73,7 +83,12 @@ function calcAll() {
         dataType: 'json',
         success: function(result) {                
             $.LoadingOverlay("hide");
-            M.toast({html: result.message, classes: 'rounded'});
+            M.toast({html: "Complete", classes: 'rounded'});
+        },
+        error: function(data){
+            err = JSON.parse(data.responseText);
+            M.toast({html: err.error.message , classes: 'rounded'});
+            $.LoadingOverlay("hide");
         }
     });
 }
@@ -90,7 +105,12 @@ function sumScore() {
         dataType: 'json',
         success: function(result) {                
             $.LoadingOverlay("hide");
-            M.toast({html: result.message, classes: 'rounded'});
+            M.toast({html: "Complete", classes: 'rounded'});
+        },
+        error: function(data){
+            err = JSON.parse(data.responseText);
+            M.toast({html: err.error.message , classes: 'rounded'});
+            $.LoadingOverlay("hide");
         }
     });
 }

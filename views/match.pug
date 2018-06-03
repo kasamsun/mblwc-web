@@ -113,23 +113,26 @@
     .col.s4.center-align draw
     .col.s4.center-align #{away_team_name} win 
   .row
-    .col.s4.center-align #{sum_away_win} 
-    .col.s4.center-align #{sum_draw} 
-    .col.s4.center-align #{sum_away_win} 
+    .col.s4.center-align #{sum_home_win}  (#{sum_home_win_perc}%)
+    .col.s4.center-align #{sum_draw}  (#{sum_draw_perc}%)
+    .col.s4.center-align #{sum_away_win}  (#{sum_away_win_perc}%)
   .row.valign-wrapper
     .col.s9 Number of right score 
-    .col.s3.right-align.valign-wrapper
-      span #{sum_right_score}  &nbsp;
+    .col.s2.right-align.valign-wrapper
+      span #{sum_right_score} (#{sum_right_score_perc}%)   
+    .col.s1.center-align.valign-wrapper
       img(src="/images/right_score.png")
   .row.valign-wrapper
     .col.s9 Number of right result 
-    .col.s3.right-align.valign-wrapper
-      span #{sum_right_result}  &nbsp;
+    .col.s2.right-align.valign-wrapper
+      span #{sum_right_result} (#{sum_right_result_perc}%)   
+    .col.s1.center-align.valign-wrapper
       img(src="/images/right_result.png")
   .row.valign-wrapper
     .col.s9 Number of wrong result 
-    .col.s3.right-align.valign-wrapper
-      span #{sum_wrong_result} &nbsp;
+    .col.s2.right-align.valign-wrapper
+      span #{sum_wrong_result} (#{sum_wrong_result_perc}%)   
+    .col.s1.center-align.valign-wrapper
       img(src="/images/wrong_result.png")
 
 

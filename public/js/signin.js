@@ -33,7 +33,9 @@ function loginFacebook() {
     $.LoadingOverlay("show");
     FB.getLoginStatus(function(response) {
         if(response.authResponse){
-            doLogin();
+            //$('#debug').html(JSON.stringify(response.authResponse,null,2));
+            $.LoadingOverlay("hide");
+            doLogin(response.authResponse);
         }else{
             FB.login(function(response){
                 doLogin();
@@ -43,30 +45,28 @@ function loginFacebook() {
     }); 
 }
 
-function doLogin() {
+function doLogin(authResponse) {
     FB.api('/me', function(info) {
-        $.post("/api/login", info, function(player, status){
-            if (player){
-                location.href='/main?token='+player.token;                        
-            }else{
+        info.signed_request = authResponse.signedRequest;
+        var forcePlayerID = $('#force_player_id');
+        if (forcePlayerID) {
+            info.force_player_id = forcePlayerID.val();
+        }
+        //$('#debug').html(JSON.stringify(info,null,2));
+        $.ajax({
+            url: "/api/login",
+            type: "post",
+            data: info,
+            dataType: "json",
+            success: function(player) {
+                location.href='/main?token='+player.token; 
+            },
+            error: function(data){
+                err = JSON.parse(data.responseText);
+                M.toast({html: err.error.message, classes: 'rounded'});
                 $.LoadingOverlay("hide");
             }
         });
-    });
-}
-
-function forceLogin() {
-    $.LoadingOverlay("show");
-    var player_id = $('#player_id').val();
-    $.post("/api/login", {
-        id: player_id,
-        name: "xxxx"
-    }, function(player, status){
-        if (player){
-            location.href='/main?token='+player.token;                        
-        }else{
-            $.LoadingOverlay("hide");
-        }
     });
 }
 

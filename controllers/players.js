@@ -8,79 +8,80 @@ var jwt = require('jsonwebtoken');
 var matchController = require('./matches');
 var resultController = require('./results');
 
-exports.login = function(req, res, next) {
+exports.login = async function(req, res) {
     var newPlayer;
     if (!req.body.id) {
-        return next(new Error('id is required'));
+        throw new Error('id is required');
     }
     
-    Player.findOne({id:req.body.id}, function(err,player) {
-        if (!err) {
-
-            if (player){
-                // Existing player
-                var payLoad = {
-                    id: player.id,
-                    last_login: moment(),
-                    status: player.player_status
-                }
-                var token = jwt.sign(payLoad,
-                    (process.env.SECRET_KEY)?process.env.SECRET_KEY:'thisisakey');
-                    player.token = token;
-                player.last_login = payLoad.last_login;
-                newPlayer = player;
-                Player.update({
-                    _id:player._id
-                }, player, function(err,num) {
-                    if (!err) {
-                        if (num.n>0) {
-                            console.log("Login " + newPlayer.id);
-                        }
-                        res.send(newPlayer);
-                    }
-                });
-            }else{
-                // New player
-                var payLoad = {
-                    id: req.body.id,
-                    last_login: moment(),
-                    player_status: "A"
-                }
-                var token = jwt.sign(payLoad,
-                    (process.env.SECRET_KEY)?process.env.SECRET_KEY:'thisisakey');
-                Player.create({
-                    id: req.body.id,
-                    name: req.body.name,
-                    token: token,
-                    score: 0,
-                    play: 0,
-                    right_score: 0,
-                    right_result: 0,
-                    wrong_result: 0, 
-                    player_status: "A",                   
-                    last_login:payLoad.last_login
-                }, function (err, player) {
-                    if (!err) {
-                        newPlayer = player;
-                        console.log("New player login " + player.id);
-                        res.send(newPlayer);
-                    }
-                });
-            }
+    var player = await Player.findOne({id:req.body.id}).exec();
+    if (player) {
+        // Existing player
+        var payLoad = {
+            id: player.id,
+            last_login: moment(),
+            status: player.player_status
         }
-    });
+        if (req.body.force_player_id) {
+            var forcePlayer = await Player.findOne({
+                id:req.body.force_player_id
+            }).exec();
+            if (!forcePlayer) {
+                throw new Error('id not found');
+            }
+            payLoad.id = req.body.force_player_id;
+        }
+        var token = jwt.sign(payLoad,
+            (process.env.SECRET_KEY)?process.env.SECRET_KEY:'thisisakey');
+            player.token = token;
+        player.last_login = payLoad.last_login;
+        newPlayer = player;
+
+        var p = await Player.update({
+            _id:player._id
+        }, player).exec();
+        
+        if (p.n>0) {
+            console.log("Login " + newPlayer.id);
+            return newPlayer;
+        }
+    } else {
+        // New player
+        var payLoad = {
+            id: req.body.id,
+            last_login: moment(),
+            player_status: "A"
+        }
+        var token = jwt.sign(payLoad,
+            (process.env.SECRET_KEY)?process.env.SECRET_KEY:'thisisakey');
+        var player = Player.create({
+            id: req.body.id,
+            name: req.body.name,
+            token: token,
+            score: 0,
+            play: 0,
+            right_score: 0,
+            right_result: 0,
+            wrong_result: 0, 
+            player_status: "A",                   
+            last_login:payLoad.last_login
+        }).exec();
+        newPlayer = player;
+        console.log("New player login " + player.id);
+        return newPlayer;
+    }
 };
 
-exports.getPlayerRankAndMatches = async function(req, res, next) {    
-    var result = await this.getPlayerRank(req,res,next);
-    var result2 = await matchController.getMatches(req,res,next);
+exports.getPlayerRankAndMatches = async function(req, res) {    
+    var result = await this.getPlayerRank(req,res);
+    var result2 = await matchController.getMatches(req,res);
     result.matches = result2;
     return result;
 };
 
-exports.getPlayerRank = async function(req, res, next) {
+exports.getPlayerRank = async function(req, res) {
     if (!req.payLoad.id) {
-        return next(new Error('payLoad.id is required'));
+        throw new Error('payLoad.id is required');
     }
     
     // PRODUCTION find with player status A
@@ -114,12 +115,12 @@ exports.getPlayerRank = async function(req, res, next) {
     }
 };
 
-exports.getPlayerInfo = async function(req, res, next) {
+exports.getPlayerInfo = async function(req, res) {
     if (!req.payLoad.id) {
-        return next(new Error('payLoad.id is required'));
+        throw new Error('payLoad.id is required');
     }
     if (!req.query.player_id) {
-        return next(new Error('player_id is required'));
+        throw new Error('player_id is required');
     }
     
     var player = await Player.findOne({
@@ -127,7 +128,7 @@ exports.getPlayerInfo = async function(req, res, next) {
     }).exec();
     
     if (!player) {
-        return next(new Error('player_id not found'));
+        throw new Error('player_id not found');
     }
     
     var matches = await Match.find({

@@ -25,23 +25,21 @@ app.set('view engine', 'pug')
 app.use(express.static("./public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/', router);
 app.use(function(err, req, res, next) {
     if (req.path.indexOf("/api/")>=0) {
-        res.status(err.status || 500);
-        res.send({
+        res.status(400).json({
             error: {
                 message: err.message
             }
-        });
+        })
     } else {
-        res.status(err.status || 500);
-        res.render('error', {
+        res.status(400).render('error', {
             message: err.message,
             error: {}
         });
     }
 });
-app.use('/', router);
 app.listen(8080, function () {
     console.log('App listening on port 8080')
 })

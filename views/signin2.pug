@@ -12,15 +12,10 @@ html
     br
     br
     br
-    br
-    br
-    .row
-      .col.s12.center-align
-        a(id="force_login_button",class="next waves-effect waves-light btn-large light-blue darken-1",onclick="forceLogin()")="Force Login"
     .row
       .col.s6.offset-s3.center-align.input-field
-          input#player_id.validate(type='text')
-          label(for='player_id') Player ID    
+          input#force_player_id.validate(type='text')
+          label(for='force_player_id') Force Player ID   
     
     #help_dialog.modal.modal-fixed-footer
       .modal-content

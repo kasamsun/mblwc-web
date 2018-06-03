@@ -4,18 +4,18 @@ var Result = require('../models/results');
 var moment = require('moment');
 var _ = require('underscore');
 
-exports.updateResult = async function(req, res, next) {
+exports.updateResult = async function(req, res) {
     if (!req.payLoad.id) {
-        return next(new Error('payLoad.id is required'));
+        throw new Error('payLoad.id is required');
     }
     if (!req.body.match_no) {
-        return next(new Error('match_no is required'));
+        throw new Error('match_no is required');
     }
     if (!req.body.home_score) {
-        return next(new Error('home_score is required'));
+        throw new Error('home_score is required');
     }
     if (!req.body.away_score) {
-        return next(new Error('away_score is required'));
+        throw new Error('away_score is required');
     }
     
     var result = await Result.findOneAndUpdate({
@@ -49,9 +49,9 @@ scoreConfig['S'] = [0,11,5,1];
 scoreConfig['3'] = [0,13,6,1];
 scoreConfig['F'] = [0,15,7,1];
 
-exports.calcMatch = async function(req, res, next) {
+exports.calcMatch = async function(req, res) {
     if (!req.body.match_no) {
-        return next(new Error('match_no is required'));
+        throw new Error('match_no is required');
     }
     
     // Calculate by match
@@ -67,9 +67,7 @@ exports.calcMatch = async function(req, res, next) {
     }).exec();
     
     if (!match) {
-        return {
-            message: "Match " + req.body.match_no + " not found"
-        }
+        throw new Error("Match " + req.body.match_no + " not found");
     }
 
     var results = await Result.find({
@@ -77,12 +75,9 @@ exports.calcMatch = async function(req, res, next) {
     }).exec();
 
     if (results.length==0) {
-        return {
-            message: "Result by match " + req.body.match_no + " not found"
-        }
+        throw new Error("Result by match " + req.body.match_no + " not found");
     }
 
-    console.log("results len=" + results.length);
     for (let result of results) {
         if ( result.home_score===match.home_score && 
                 result.away_score===match.away_score) {
@@ -116,20 +111,16 @@ exports.calcMatch = async function(req, res, next) {
                 result.score = scoreConfig[match.match_type][3];
             }
         }
-        console.log(JSON.stringify(result));
+        
         await Result.update({
             _id: result._id
         },result).exec();
     }
-
-    return {
-        message: "OK"
-    };
 };
 
-exports.calcPlayer = async function(req, res, next) { 
+exports.calcPlayer = async function(req, res) { 
     if (!req.body.player_id) {
-        return next(new Error('player id is required'));
+        throw new Error('player id is required');
     }
     
     // Calculate by player
@@ -139,12 +130,9 @@ exports.calcPlayer = async function(req, res, next) {
     //         put score in result
     console.log("calcPlayer");   
     
-    return {
-        message: "OK"
-    };
 };
 
-exports.calcAll = async function(req, res, next) { 
+exports.calcAll = async function(req, res) { 
     // Calculate all
     //     select all match which have score
     //     select all result 
@@ -152,12 +140,9 @@ exports.calcAll = async function(req, res, next) {
     //         put score in result  
     console.log("calcAll");   
     
-    return {
-        message: "OK"
-    };
 };
 
-exports.sumScore = async function(req, res, next) {  
+exports.sumScore = async function(req, res) {  
     console.log("sumPlayerScore");
     var results = await Result.aggregate([{
         $group: {
@@ -233,10 +218,6 @@ exports.sumScore = async function(req, res, next) {
             sum_away_win: result.sum_away_win
         }).exec();
     }
-
-    return {
-        message: "OK"
-    };
 };
 
 exports.getResultType = function(match,result) {

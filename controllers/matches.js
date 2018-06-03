@@ -4,9 +4,9 @@ var Match = require('../models/matches');
 var Result = require('../models/results');
 var resultController = require('./results');
 
-exports.getMatches = async function(req, res, next) {
+exports.getMatches = async function(req, res) {
     if (!req.payLoad.id) {
-        return next(new Error('payLoad.id is required'));
+        throw new Error('payLoad.id is required');
     }
 
     var matchs = await Match.find({}).sort({match_no:1}).exec();
@@ -40,9 +40,9 @@ exports.getMatches = async function(req, res, next) {
     })
 };
 
-exports.getMatchInfo = async function(req, res, next) {
+exports.getMatchInfo = async function(req, res) {
     if (!req.payLoad.id) {
-        return next(new Error('payLoad.id is required'));
+        throw new Error('payLoad.id is required');
     }
 
     var match = await Match.findOne({
