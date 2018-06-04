@@ -22,53 +22,24 @@ function calcMatch() {
     $.ajax({
         url: "/api/calc-match",
         type: 'post',
+        dataType: 'json',
         data: {
             match_no: $('#cal_by_match').val()
         },
         headers: {
             "x-access-token": getParameterByName('token')
         },
-        dataType: 'json',
         success: function(result) {                
             $.LoadingOverlay("hide");
-            M.toast({html: "Complete", classes: 'rounded'});
+            M.toast({html: result.no_of_player + " Players calculated", classes: 'rounded'});
         },
         error: function(data){
+            $.LoadingOverlay("hide");
             err = JSON.parse(data.responseText);
             M.toast({html: err.error.message, classes: 'rounded'});
-            $.LoadingOverlay("hide");
         }
     });
 
-}
-
-function calcPlayer() {  
-    if (!$('#cal_by_player').val()){
-        M.toast({html: "Please enter player id", classes: 'rounded'});
-        return;
-    }          
-    $.LoadingOverlay("show");
-    $.ajax({
-        url: "/api/calc-player",
-        type: 'post',
-        data: {
-            player_id: $('#cal_by_player').val()
-        },
-        headers: {
-            "x-access-token": getParameterByName('token')
-        },
-        dataType: 'json',
-        success: function(result) {                
-            $.LoadingOverlay("hide");
-            M.toast({html: "Complete", classes: 'rounded'});
-        },
-        error: function(data){
-            err = JSON.parse(data.responseText);
-            M.toast({html: err.error.message , classes: 'rounded'});
-            $.LoadingOverlay("hide");
-        }
-    });
-    
 }
 
 function calcAll() {         
@@ -77,18 +48,18 @@ function calcAll() {
         url: "/api/calc-all",
         type: 'post',
         data: {},
+        dataType: 'json',
         headers: {
             "x-access-token": getParameterByName('token')
         },
-        dataType: 'json',
         success: function(result) {                
             $.LoadingOverlay("hide");
-            M.toast({html: "Complete", classes: 'rounded'});
+            M.toast({html: result.no_of_player + " Players, " + result.no_of_match + " Matches calculated", classes: 'rounded'});
         },
         error: function(data){
+            $.LoadingOverlay("hide");
             err = JSON.parse(data.responseText);
             M.toast({html: err.error.message , classes: 'rounded'});
-            $.LoadingOverlay("hide");
         }
     });
 }
@@ -99,18 +70,18 @@ function sumScore() {
         url: "/api/sum-score",
         type: 'post',
         data: {},
+        dataType: 'json',
         headers: {
             "x-access-token": getParameterByName('token')
         },
-        dataType: 'json',
-        success: function(result) {                
+        success: function(result) {      
             $.LoadingOverlay("hide");
-            M.toast({html: "Complete", classes: 'rounded'});
+            M.toast({html: result.no_of_player + " Players, " + result.no_of_match + " Matches summarized", classes: 'rounded'});
         },
         error: function(data){
+            $.LoadingOverlay("hide");
             err = JSON.parse(data.responseText);
             M.toast({html: err.error.message , classes: 'rounded'});
-            $.LoadingOverlay("hide");
         }
     });
 }

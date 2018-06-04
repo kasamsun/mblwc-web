@@ -11,13 +11,13 @@ window.fbAsyncInit = function() {
     FB.AppEvents.logPageView();
     $("#login_button").toggleClass("disabled");
     $("#login_button").addClass("animated");
-    window.setTimeout('animate()',5000);
+    window.setTimeout('animate()',7000);
 };
 
 var anims = ['swing','tada','jello','rubberBand','bounce'];
 function animate() {
     $("#login_button").removeClass(anims.join(" ")).addClass(_.sample(anims));
-    window.setTimeout('animate()',5000);
+    window.setTimeout('animate()',7000);
 }
 
 (function(d, s, id){
@@ -39,8 +39,7 @@ function loginFacebook() {
         }else{
             FB.login(function(response){
                 doLogin();
-            });
-            
+            });            
         }
     }); 
 }

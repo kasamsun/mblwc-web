@@ -18,6 +18,10 @@ exports.updateResult = async function(req, res) {
         throw new Error('away_score is required');
     }
     
+    // TODO: validate match start_timestamp
+
+
+
     var result = await Result.findOneAndUpdate({
         id: req.payLoad.id,
         match_no: req.body.match_no
@@ -54,7 +58,7 @@ exports.calcMatch = async function(req, res) {
         throw new Error('match_no is required');
     }
     
-    // Calculate by match
+    // Calculate by match , use when enter score to match
     //     select a match by match_no (must have score)
     //         select result by a match_no (every player)
     //         calc score
@@ -116,35 +120,86 @@ exports.calcMatch = async function(req, res) {
             _id: result._id
         },result).exec();
     }
-};
 
-exports.calcPlayer = async function(req, res) { 
-    if (!req.body.player_id) {
-        throw new Error('player id is required');
+    return {
+        match: req.body.match_no,
+        no_of_player: results.length
     }
-    
-    // Calculate by player
-    //     select all match which have score
-    //         select result by a player ( every match
-    //         calc score
-    //         put score in result
-    console.log("calcPlayer");   
-    
 };
 
 exports.calcAll = async function(req, res) { 
-    // Calculate all
+    // Calculate all , refesh all score 
     //     select all match which have score
     //     select all result 
     //         calc score
     //         put score in result  
     console.log("calcAll");   
+    var matches = await Match.find({
+        home_score: {
+            $exists: true
+        }
+    }).exec();
     
+    var no_of_player = 0;
+    for (let match of matches) {
+
+        var results = await Result.find({
+            match_no: match.match_no
+        }).exec();
+    
+        if (no_of_player<results.length) {
+            no_of_player = results.length;
+        }
+
+        for (let result of results) {
+            if ( result.home_score===match.home_score && 
+                    result.away_score===match.away_score) {
+                result.right_score = 1;
+                result.right_result = 0;
+                result.wrong_result = 0;
+                result.score = scoreConfig[match.match_type][1];
+            } else {
+                if (result.home_score > result.away_score && 
+                        match.home_score > match.away_score) {
+                    result.right_score = 0;
+                    result.right_result = 1;
+                    result.wrong_result = 0;
+                    result.score = scoreConfig[match.match_type][2];
+                } else if (result.home_score===result.away_score && 
+                                match.home_score===match.away_score) {
+                    result.right_score = 0;
+                    result.right_result = 1;
+                    result.wrong_result = 0;
+                    result.score = scoreConfig[match.match_type][2];
+                } else if (result.home_score < result.away_score && 
+                                match.home_score < match.away_score) {
+                    result.right_score = 0;
+                    result.right_result = 1;
+                    result.wrong_result = 0;
+                    result.score = scoreConfig[match.match_type][2];
+                } else {
+                    result.right_score = 0;
+                    result.right_result = 0;
+                    result.wrong_result = 1;
+                    result.score = scoreConfig[match.match_type][3];
+                }
+            }
+            
+            await Result.update({
+                _id: result._id
+            },result).exec();
+        }
+    }
+
+    return {
+        no_of_match: matches.length,
+        no_of_player: no_of_player
+    }
 };
 
 exports.sumScore = async function(req, res) {  
     console.log("sumPlayerScore");
-    var results = await Result.aggregate([{
+    var playerResults = await Result.aggregate([{
         $group: {
             _id: "$id",
             sum_score: { $sum: "$score"},
@@ -154,7 +209,7 @@ exports.sumScore = async function(req, res) {
         }
     }]).exec();
     
-    for (let result of results) {
+    for (let result of playerResults) {
         var n = await Player.update({
             id: result._id
         },{
@@ -167,7 +222,7 @@ exports.sumScore = async function(req, res) {
     }
       
     console.log("sumMatchScore");    
-    var results = await Result.aggregate([{
+    var matchResults = await Result.aggregate([{
         $group: {
             _id: "$match_no",
             sum_score: { $sum: "$score"},
@@ -177,7 +232,7 @@ exports.sumScore = async function(req, res) {
         }
     }]).exec();
     
-    for (let result of results) {
+    for (let result of matchResults) {
         var n = await Match.update({
             match_no: result._id
         },{
@@ -217,6 +272,11 @@ exports.sumScore = async function(req, res) {
             sum_draw: result.sum_draw,
             sum_away_win: result.sum_away_win
         }).exec();
+    }
+
+    return {
+        no_of_match: matchResults.length,
+        no_of_player: playerResults.length
     }
 };
 

@@ -10,7 +10,8 @@ var PlayerSchema = new mongoose.Schema({
     right_result: {type: Number, required: true},
     wrong_result: {type: Number, required: true},
     player_status: {type: String},
-    last_login: {type: Date}
+    last_login: {type: Date},
+    fav_team: {type: String}, 
   }, {
     collection: 'players'  
 });

@@ -65,7 +65,7 @@ exports.login = async function(req, res) {
             wrong_result: 0, 
             player_status: "A",                   
             last_login:payLoad.last_login
-        }).exec();
+        });
         newPlayer = player;
         console.log("New player login " + player.id);
         return newPlayer;
@@ -102,6 +102,7 @@ exports.getPlayerRank = async function(req, res) {
         right_score: myplayer.right_score,
         right_result: myplayer.right_result,
         wrong_result: myplayer.wrong_result,
+        fav_team: myplayer.fav_team,
         today: moment(),
         players: players.map((player) => {
             return {
@@ -205,5 +206,25 @@ exports.getPlayerInfo = async function(req, res) {
         right_result: player.right_result,
         wrong_result: player.wrong_result,
         matches: matches
+    }
+};
+
+exports.updatePlayer = async function(req, res) {
+    if (!req.payLoad.id) {
+        throw new Error('payLoad.id is required');
+    }
+    if (!req.body.fav_team) {
+        throw new Error('fav_team is required');
+    }
+
+    var player = await Player.findOneAndUpdate({
+        id: req.payLoad.id
+    },{
+        fav_team: req.body.fav_team
+    },{upsert: false, 'new': true}).exec();
+    
+    return {
+        id: req.payLoad.id,
+        fav_team: req.body.fav_team
     }
 };

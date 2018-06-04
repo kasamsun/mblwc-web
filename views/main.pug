@@ -16,15 +16,16 @@ html
             a.active(href='#ranking_tab') Ranking
           li.tab.col.s3
             a(href='#schedule_tab') Schedule
-          li.tab.col.s3
-            a(href='#standing_tab') Standing
+          //- li.tab.col.s3
+          //-   a(href='#standing_tab') Standing
 
-      ul#player_info.sidenav
+      - var bkgstyle = (fav_team)?"background:-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255,255,255, 0.7) 100%), url(/images/"+fav_team+".png) repeat 100% 0":""
+      ul#player_info.sidenav.bkg-team(style=bkgstyle)
         li
           div.valign-wrapper
             - var url = "https://graph.facebook.com/"+id+"/picture";
             img.large-circle-image.circle(src=url)
-            span=name              
+            span=name          
           .seperate-line
           .profile-date.left #{moment(today).utcOffset('+0700').format('D MMM YYYY')} 
           .profile-date.right &nbsp; points
@@ -43,6 +44,10 @@ html
           .clearfix
           .seperate-line
         li
+          a.modal-trigger(href='#team_dialog', data-source="/team")
+            i.material-icons language 
+            | Favorite Team
+        li
           a(href='./signin')
             i.material-icons exit_to_app 
             | Logout
@@ -58,7 +63,7 @@ html
               | #{player.name}
               if player.level>0
                 - var url = "/images/medal_"+player.level+".png";
-                img(src=url) 
+                img(src=url,width="24") 
             .player-score.col.s2.right-align #{player.score}
           .list-line
         br
@@ -137,5 +142,12 @@ html
       .modal-content
       .modal-footer
         a.modal-close.waves-effect.waves-green.btn-flat(href='#!') Ok
+    
+    #team_dialog.modal.modal-fixed-footer
+      .modal-content
+      .modal-footer
+        a#save_team_button.modal-close.waves-effect.waves-green.btn-flat(href='#!',onclick="saveFavTeam()") Save
+        a.modal-close.waves-effect.waves-green.btn-flat(href='#!') Cancel
+    hidden#fav_team
 
     script(src="js/main.js",type="text/javascript")

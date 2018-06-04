@@ -193,6 +193,9 @@ nav .brand-logo {
     text-align:center;
     font-size: 24px;
 }
+#player_info {
+    background-color:white;
+}
 #player_info .input-field {
     margin-top:0px;
     margin-bottom:0px;
@@ -218,7 +221,17 @@ nav .brand-logo {
 }
 .modal-content {
     padding:16px;
+    text-align:center;
 }
 .modal-content i {
     margin-right:8px;
+}
+.bkg-team {
+    background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255,255,255, 0.8) 100%), repeat 100% 0
+}
+.team-selected {
+    background-color:#dff2fa;
+}
+.choose-team {
+    cursor:pointer;
 }

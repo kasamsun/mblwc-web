@@ -5,8 +5,10 @@ $(document).ready(function() {
     resizeTabContent();    
     
     $('.modal-trigger').click(function(){ 
-        var url = $('.modal-trigger').attr("data-source");
-        $.get( url, function( data ) {
+        var el = $(this);
+        $(".modal-content").html('<div class="preloader-wrapper small active center-align" style="margin-top:120px"><div class="spinner-layer spinner-blue-only"><div class="circle-clipper left"><div class="circle"></div></div><div class="gap-patch"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>');
+        $('#save_team_button').html('Select your favorite team')
+        $.get( el.attr('data-source'), function( data ) {
             $( ".modal-content" ).html(data);
         });
     });
@@ -94,5 +96,38 @@ function saveScore(match_no) {
     }
 }
 
-  
+function selectTeam(el,team,team_name) {
+    $('.choose-team').removeClass('team-selected');
+    $(el).addClass('team-selected');
+    $('#save_team_button').html('Save <b>' + team_name + '</b> as favorite');
+    $('#fav_team').val(team);
+}
+function saveFavTeam() {
+    $.LoadingOverlay("show");
+    
+    $.ajax({
+        url: "/api/players",
+        type: 'post',
+        data: {                
+            fav_team: $('#fav_team').val()
+        },
+        headers: {
+            "x-access-token": getParameterByName('token')
+        },
+        dataType: 'json',
+        success: function(result) {                
+            $.LoadingOverlay("hide");
+            M.toast({html: 'Your team is saved', classes: 'rounded'});
+            $('#player_info').css("background","-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255,255,255, 0.7) 100%), url(/images/"+$('#fav_team').val()+".png) repeat 100% 0");
+            closePopup();
+        },
+        error: function(data){
+            err = JSON.parse(data.responseText);
+            M.toast({html: err.error.message , classes: 'rounded'});
+            $.LoadingOverlay("hide");
+        }
+    });
+
+
+}
   

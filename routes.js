@@ -15,6 +15,9 @@ const errorHandler = fn => (req, res, next) => {
 router.get(["/"], function (req,res) {  
     res.redirect('/signin');
 })
+router.get(["/team"], errorHandler(async (req,res) => {
+    res.render(req.path.split("/").join(""),{});
+}))
 router.get(["/help"], function (req,res) {  
     res.render(req.path.split("/").join(""),{});
 })
@@ -52,25 +55,21 @@ router.post(["/api/results"], errorHandler(async (req,res) => {
     await validateToken(req,res);
     res.json(await resultController.updateResult(req,res));
 }))
+router.post(["/api/players"], errorHandler(async (req,res) => {
+    await validateToken(req,res);
+    res.json(await playerController.updatePlayer(req,res));
+}))
 router.post(["/api/calc-match"], errorHandler(async (req,res) => {
     await validateToken(req,res,true);
-    await resultController.calcMatch(req,res);
-    res.json({});
-}))
-router.post(["/api/calc-player"], errorHandler(async (req,res) => {
-    await validateToken(req,res,true);
-    await resultController.calcPlayer(req,res);
-    res.json({});
+    res.json(await resultController.calcMatch(req,res));
 }))
 router.post(["/api/calc-all"], errorHandler(async (req,res) => {
     await validateToken(req,res,true);
-    await resultController.calcAll(req,res);
-    res.json({});
+    res.json(await resultController.calcAll(req,res));
 }))
 router.post(["/api/sum-score"], errorHandler(async (req,res) => {
     await validateToken(req,res,true);
-    await resultController.sumScore(req,res);
-    res.json({});
+    res.json(await resultController.sumScore(req,res));
 }))
 
 function validateToken(req, res, isAdmin) {
