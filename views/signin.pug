@@ -3,12 +3,14 @@ html
   body
     .sign-in-header.right
       a.modal-trigger(href='#help_dialog', data-source="/help")
-        i.material-icons info_outline
+        i.material-icons help_outline
 
     .row
       .col.s12.center-align
         a(id="login_button",class="next waves-effect waves-light disabled btn-large light-blue darken-1",onclick="loginFacebook()")="Login with facebook"
-
+    .row
+      .col.s12.center-align
+        img(src="/images/fifa-world-cup-2018-russia.png",width="240")
     #debug
 
     #help_dialog.modal.modal-fixed-footer

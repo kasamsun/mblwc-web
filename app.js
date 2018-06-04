@@ -27,6 +27,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', router);
 app.use(function(err, req, res, next) {
+    console.log(err);
     if (req.path.indexOf("/api/")>=0) {
         res.status(400).json({
             error: {

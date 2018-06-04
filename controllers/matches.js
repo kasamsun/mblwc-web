@@ -85,15 +85,15 @@ exports.getMatchInfo = async function(req, res) {
 exports.getMatchTypeDesc = function(match_type) {
     if (_.contains(['A','B','C','D','E','F','G','H'],match_type)) {
         return 'Group ' + match_type;
-    } else if ( match.match_type==='2' ) {
+    } else if ( match_type==='2' ) {
         return 'Round of 16';
-    } else if ( match.match_type==='Q' ) {
+    } else if ( match_type==='Q' ) {
         return 'Quarter Finals';
-    } else if ( match.match_type==='S' ) {
+    } else if ( match_type==='S' ) {
         return 'Semi-Finals';
-    } else if ( match.match_type==='3' ) {
+    } else if ( match_type==='3' ) {
         return '3rd Place';
-    } else if ( match.match_type==='F' ) {
+    } else if ( match_type==='F' ) {
         return 'Final';
     }
     return '';

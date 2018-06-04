@@ -1,8 +1,14 @@
 #player_info
-  .valign-wrapper
-    - var url = "https://graph.facebook.com/"+id+"/picture";
-    img.large-circle-image.circle(src=url)
-    span=name
+  .row
+    .col.s9.valign-wrapper
+      - var url = "https://graph.facebook.com/"+id+"/picture";
+      img.large-circle-image.circle(src=url)
+      span=name
+    .col.s3.center-align
+      if fav_team
+        - var url = "/images/"+fav_team+".png";
+        img.fav_team.circle-image.circle(src=url, alt=fav_team)        
+        div #{fav_team_name}
   .row.valign-wrapper
     .col.s8
       .profile-score-detail 
@@ -16,10 +22,9 @@
           img(src="/images/right_result.png")
           | #{wrong_result}
           img(src="/images/wrong_result.png")  
-    .col.s4
-      div.valign-wrapper
-        span.profile-score #{score}
-        | &nbsp; points 
+    .col.s4.valign-wrapper
+      span.profile-score #{score}
+      | &nbsp; points 
 
   .seperate-line
 

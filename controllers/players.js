@@ -205,6 +205,8 @@ exports.getPlayerInfo = async function(req, res) {
         right_score: player.right_score,
         right_result: player.right_result,
         wrong_result: player.wrong_result,
+        fav_team: player.fav_team,
+        fav_team_name: (player.fav_team)?this.getTeamName(player.fav_team):undefined,
         matches: matches
     }
 };
@@ -228,3 +230,41 @@ exports.updatePlayer = async function(req, res) {
         fav_team: req.body.fav_team
     }
 };
+
+
+var teamName = [];
+teamName["RUS"] = "Russia";
+teamName["URU"] = "Uruguay";
+teamName["EGY"] = "Egypt";
+teamName["KSA"] = "Saudi Arabia";
+teamName["POR"] = "Portugal";
+teamName["ESP"] = "Spain";
+teamName["MAR"] = "Morocco";
+teamName["IRN"] = "Iran";
+teamName["FRA"] = "France";
+teamName["PER"] = "Peru";
+teamName["DEN"] = "Denmark";
+teamName["AUS"] = "Australia";
+teamName["ARG"] = "Argentina";
+teamName["CRO"] = "Croatia";
+teamName["NGA"] = "Nigeria";
+teamName["ISL"] = "Iceland";
+teamName["BRA"] = "Brazil";
+teamName["SUI"] = "Switzerland";
+teamName["CRC"] = "Costa Rica";
+teamName["SRB"] = "Serbia";
+teamName["GER"] = "Germany";
+teamName["MEX"] = "Mexico";
+teamName["SWE"] = "Sweden";
+teamName["KOR"] = "South Korea";
+teamName["BEL"] = "Belgium";
+teamName["ENG"] = "England";
+teamName["TUN"] = "Tunisia";
+teamName["PAN"] = "Panama";
+teamName["COL"] = "Columbia";
+teamName["SEN"] = "Senegal";
+teamName["POL"] = "Poland";
+teamName["JPN"] = "Japan";
+exports.getTeamName = function(team) {
+    return teamName[team];
+}
