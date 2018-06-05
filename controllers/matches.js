@@ -93,7 +93,7 @@ exports.getMatchTypeDesc = function(match_type) {
         return 'Semi-Finals';
     } else if ( match_type==='3' ) {
         return '3rd Place';
-    } else if ( match_type==='F' ) {
+    } else if ( match_type==='1' ) {
         return 'Final';
     }
     return '';
