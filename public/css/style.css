@@ -3,6 +3,9 @@ html,body{
     color:#666666;    
 	overflow: hidden;
 }
+.dropdown-content li > a, .dropdown-content li > span {
+    color:#1e9ad5;
+}
 #login_button {
     margin-top:40px;
 }
