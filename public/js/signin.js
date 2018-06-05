@@ -34,7 +34,6 @@ function loginFacebook() {
     FB.getLoginStatus(function(response) {
         if(response.authResponse){
             //$('#debug').html(JSON.stringify(response.authResponse,null,2));
-            $.LoadingOverlay("hide");
             doLogin(response.authResponse);
         }else{
             FB.login(function(response){
