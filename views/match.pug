@@ -134,10 +134,10 @@
   #comment_history   
     for comment in comments
       .list-row.row.valign-wrapper
-        .comment-image.col.s12.valign-wrapper
+        .chip
           - var url = "https://graph.facebook.com/"+comment.id+"/picture";
-          img.circle-image.circle(src=url)
-          | #{comment.message}
+          img(src=url)
+          | #{comment.message}       
 
 br
 br

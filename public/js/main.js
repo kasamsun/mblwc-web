@@ -65,7 +65,7 @@ function showMatchPopup(el,match_no) {
     $.LoadingOverlay("show");
     $("#popup_content").html('').load('/match?match_no='+match_no+'&token='+getParameterByName('token'),'',function() {
         $.LoadingOverlay("hide");
-        $('select').formSelect();        
+        $('select').formSelect();
     });
 }
 
