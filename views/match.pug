@@ -94,46 +94,51 @@
         .result-score #{result.away_score}
     .col.s2
   .row
-    .col.s12.center-align 
-      div * When match start you can not save score
-  .row
     if can_save==true
       .col.s12 
         .center-align
-          a(id="save_button",class="next waves-effect waves-light btn-large light-blue darken-1",onclick="saveScore('"+match_no+"')")="Save score"
+          a(id="save_button",class="next waves-effect waves-light btn light-blue darken-1",onclick="saveScore('"+match_no+"')")="Save score"
     else
       .col.s12 
         .center-align
-          a(id="save_button",class="next waves-effect waves-light disabled btn-large light-blue darken-1")="Save score"
+          a(id="save_button",class="next waves-effect waves-light disabled btn light-blue darken-1")="Save score"
   
-  .row
-    .seperate-line  
-  .row
-    .col.s4.center-align #{home_team_name} win 
-    .col.s4.center-align draw
-    .col.s4.center-align #{away_team_name} win 
-  .row
-    .col.s4.center-align #{sum_home_win}  (#{sum_home_win_perc}%)
-    .col.s4.center-align #{sum_draw}  (#{sum_draw_perc}%)
-    .col.s4.center-align #{sum_away_win}  (#{sum_away_win_perc}%)
+  .seperate-line  
+  .row.center-align
+    .col.s4 #{home_team_name} win 
+    .col.s4 draw
+    .col.s4 #{away_team_name} win 
+  .row.center-align
+    .col.s4 #{sum_home_win}  (#{sum_home_win_perc}%)
+    .col.s4 #{sum_draw}  (#{sum_draw_perc}%)
+    .col.s4 #{sum_away_win}  (#{sum_away_win_perc}%)
+  .seperate-line
   .row.valign-wrapper
-    .col.s9 Number of right score 
-    .col.s2.right-align.valign-wrapper
-      span #{sum_right_score} (#{sum_right_score_perc}%)   
-    .col.s1.center-align.valign-wrapper
-      img(src="/images/right_score.png")
+    .col.s3 Play #{play}
+    .col.s3.center-align #{sum_right_score} (#{sum_right_score_perc}%) 
+      img(src="/images/right_score.png",style="vertical-align:middle")  
+    .col.s3.center-align #{sum_right_result} (#{sum_right_result_perc}%)
+      img(src="/images/right_result.png",style="vertical-align:middle")  
+    .col.s3.center-align #{sum_wrong_result} (#{sum_wrong_result_perc}%) 
+      img(src="/images/wrong_result.png",style="vertical-align:middle")  
+  .seperate-line
+  br
   .row.valign-wrapper
-    .col.s9 Number of right result 
-    .col.s2.right-align.valign-wrapper
-      span #{sum_right_result} (#{sum_right_result_perc}%)   
-    .col.s1.center-align.valign-wrapper
-      img(src="/images/right_result.png")
-  .row.valign-wrapper
-    .col.s9 Number of wrong result 
-    .col.s2.right-align.valign-wrapper
-      span #{sum_wrong_result} (#{sum_wrong_result_perc}%)   
-    .col.s1.center-align.valign-wrapper
-      img(src="/images/wrong_result.png")
+    .input-field.col.s11
+      i.material-icons.prefix account_circle
+      input#comment_message(type='text',maxlength="40")
+      label(for='comment_message') Enter your comment   
+    .col.s1.center-align
+      a(href='#',onclick="postComment("+match_no+")")
+        i.material-icons send
+  #comment_history   
+    for comment in comments
+      .list-row.row.valign-wrapper
+        .comment-image.col.s12.valign-wrapper
+          - var url = "https://graph.facebook.com/"+comment.id+"/picture";
+          img.circle-image.circle(src=url)
+          | #{comment.message}
+
 br
 br
 

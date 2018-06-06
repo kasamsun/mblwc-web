@@ -1,4 +1,30 @@
 
+window.fbAsyncInit = function() {
+    var result = FB.init({
+        appId       : '582329818791668',
+        xfbml       : true,
+        status      : true, 
+        cookie      : true,
+        oauth       : true,
+        version     : 'v3.0'
+    });
+    FB.AppEvents.logPageView();
+};
+
+(function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "https://connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+function logoutFacebook() {
+    FB.logout(function(response) {
+        location.href="./signin";
+    });
+}
+
 $(document).ready(function() {
     $('.sidenav').sidenav();
     $('.tabs').tabs({swipeable:false});
@@ -102,6 +128,7 @@ function selectTeam(el,team,team_name) {
     $('#save_team_button').html('Save <b>' + team_name + '</b> as favorite');
     $('#fav_team').val(team);
 }
+
 function saveFavTeam() {
     $.LoadingOverlay("show");
     
@@ -118,7 +145,7 @@ function saveFavTeam() {
         success: function(result) {                
             $.LoadingOverlay("hide");
             M.toast({html: 'Your team is saved', classes: 'rounded'});
-            $('#player_info').css("background","-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255,255,255, 0.7) 100%), url(/images/"+$('#fav_team').val()+".png) repeat 100% 0");
+            $('#player_info').css("background","-webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255,255,255, 0.7) 100%), url(/images/"+$('#fav_team').val()+".png) repeat 100% 0");
             closePopup();
         },
         error: function(data){
@@ -127,7 +154,34 @@ function saveFavTeam() {
             $.LoadingOverlay("hide");
         }
     });
+}
 
+function postComment(match_no) {
+    if (!$('#comment_message').val()) return;
 
+    $.LoadingOverlay("show");
+    $.ajax({
+        url: "/api/comments",
+        type: 'post',
+        data: {                
+            match_no: match_no,
+            message: $('#comment_message').val()
+        },
+        headers: {
+            "x-access-token": getParameterByName('token')
+        },
+        dataType: 'json',
+        success: function(result) {
+            $('#comment_message').val('');
+            $("#comment_history").load('/comment?match_no='+match_no+'&token='+getParameterByName('token'),'', function() {
+                $.LoadingOverlay("hide");
+            });
+        },
+        error: function(data){
+            err = JSON.parse(data.responseText);
+            M.toast({html: err.error.message , classes: 'rounded'});
+            $.LoadingOverlay("hide");
+        }
+    });
 }
   

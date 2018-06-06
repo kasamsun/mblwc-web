@@ -5,8 +5,8 @@ const uuidv1 = require('uuid/v1');
 var moment = require('moment');
 var _ = require('underscore');
 var jwt = require('jsonwebtoken');
-var matchController = require('./matches');
-var resultController = require('./results');
+var matchController = require('./match-controller');
+var resultController = require('./result-controller');
 
 exports.login = async function(req, res) {
     var newPlayer;

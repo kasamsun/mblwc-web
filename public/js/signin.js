@@ -1,6 +1,6 @@
 
-window.fbAsyncInit = function() {
-    FB.init({
+window.fbAsyncInit = function() {  
+    var result = FB.init({
         appId       : '582329818791668',
         xfbml       : true,
         status      : true, 
@@ -8,7 +8,7 @@ window.fbAsyncInit = function() {
         oauth       : true,
         version     : 'v3.0'
     });
-    FB.AppEvents.logPageView();
+    FB.AppEvents.logPageView();   
     $("#login_button").toggleClass("disabled");
     $("#login_button").addClass("animated");
     window.setTimeout('animate()',7000);
@@ -37,7 +37,12 @@ function loginFacebook() {
             doLogin(response.authResponse);
         }else{
             FB.login(function(response){
-                doLogin();
+                //$('#debug').html(JSON.stringify(response,null,2));
+                if (response.status === 'connected') {
+                    doLogin(response.authResponse);
+                } else {
+                    $.LoadingOverlay("hide");
+                }
             });            
         }
     }); 

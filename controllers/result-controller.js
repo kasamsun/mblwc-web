@@ -18,9 +18,17 @@ exports.updateResult = async function(req, res) {
         throw new Error('away_score is required');
     }
     
-    // TODO: validate match start_timestamp
+    var match = await Match.findOne({
+        match_no: req.body.match_no
+    })
 
+    if (!match) {
+        throw new Error("match_no is not found");
+    }
 
+    if (moment().isAfter(match.start_timestamp)) {
+        throw new Error("match has begun, can not enter score");
+    }
 
     var result = await Result.findOneAndUpdate({
         id: req.payLoad.id,

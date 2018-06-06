@@ -19,7 +19,7 @@ html
           //- li.tab.col.s3
           //-   a(href='#standing_tab') Standing
 
-      - var bkgstyle = (fav_team)?"background:-moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255,255,255, 0.7) 100%), url(/images/"+fav_team+".png) repeat 100% 0":""
+      - var bkgstyle = (fav_team)?"background:-webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255,255,255, 0.7) 100%), url(/images/"+fav_team+".png) repeat 100% 0;":""
       ul#player_info.sidenav.bkg-team(style=bkgstyle)
         li
           div.valign-wrapper
@@ -48,7 +48,7 @@ html
             i.material-icons language 
             | Favorite Team
         li
-          a(href='./signin')
+          a(href='#',onclick="logoutFacebook()")
             i.material-icons exit_to_app 
             | Logout
 

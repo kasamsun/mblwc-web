@@ -1,9 +1,10 @@
 const express = require('express') ;
 const jwt = require('jsonwebtoken');
 var app = require('./app');
-var playerController = require('./controllers/players');
-var matchController = require('./controllers/matches');
-var resultController = require('./controllers/results');
+var playerController = require('./controllers/player-controller');
+var matchController = require('./controllers/match-controller');
+var resultController = require('./controllers/result-controller');
+var commentController = require('./controllers/comment-controller');
 
 var router = express.Router();
 
@@ -24,7 +25,7 @@ router.get(["/help"], function (req,res) {
 router.get(["/signin"], function (req,res) {  
     res.render(req.path.split("/").join(""),{});
 })
-router.get(["/signin2"], function (req,res) {  
+router.get(["/signinx"], function (req,res) {  
     res.render(req.path.split("/").join(""),{});
 })
 router.get(["/main"], errorHandler(async (req,res) => {
@@ -42,6 +43,11 @@ router.get(["/player"], errorHandler(async (req,res) => {
     res.render(req.path.split("/").join(""),
         await playerController.getPlayerInfo(req,res));
 }))
+router.get(["/comment"], errorHandler(async (req,res) => {
+    await validateToken(req,res); 
+    res.render(req.path.split("/").join(""),
+        await commentController.getComments(req,res));
+}))
 router.get(["/manager"], errorHandler(async (req,res) => {
     await validateToken(req,res,true); 
     res.render(req.path.split("/").join(""),{});
@@ -54,6 +60,10 @@ router.post(["/api/login"], errorHandler(async (req,res) => {
 router.post(["/api/results"], errorHandler(async (req,res) => {
     await validateToken(req,res);
     res.json(await resultController.updateResult(req,res));
+}))
+router.post(["/api/comments"], errorHandler(async (req,res) => {
+    await validateToken(req,res);
+    res.json(await commentController.addComment(req,res));
 }))
 router.post(["/api/players"], errorHandler(async (req,res) => {
     await validateToken(req,res);
