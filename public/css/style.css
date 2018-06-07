@@ -6,7 +6,10 @@ html,body{
 #login_button {
 }
 .sign-in-header {
-    padding:24px;
+    padding:24px 24px 8px 24px;
+}
+#welcome {
+    margin-bottom:8px;
 }
 #main_tab {
     background-color:#1e9ad5;
