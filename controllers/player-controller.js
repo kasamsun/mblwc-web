@@ -74,8 +74,9 @@ exports.login = async function(req, res) {
 
 exports.getPlayerRankAndMatches = async function(req, res) {    
     var result = await this.getPlayerRank(req,res);
-    var result2 = await matchController.getMatches(req,res);
-    result.matches = result2;
+    var result2 = await matchController.getFinishAndUnfinishMatches(req,res);
+    result.unfinishMatches = result2.unfinishMatches;
+    result.finishMatches = result2.finishMatches;
     return result;
 };
 

@@ -5,17 +5,17 @@ var Result = require('../models/results');
 var Comment = require('../models/comments');
 var resultController = require('./result-controller');
 
-exports.getMatches = async function(req, res) {
+exports.getFinishAndUnfinishMatches = async function(req, res) {
     if (!req.payLoad.id) {
         throw new Error('payLoad.id is required');
     }
 
-    var matchs = await Match.find({}).sort({match_no:1}).exec();
+    var matches = await Match.find({}).sort({match_no:1}).exec();
     var results = await Result.find({
         id:req.payLoad.id
     }).sort({match_no:1}).exec();
 
-    return matchs.map((match)=>{
+    var temps =  matches.map((match)=>{
         var result = results.find((result)=>{
             return result.match_no===match.match_no;
         });
@@ -38,7 +38,22 @@ exports.getMatches = async function(req, res) {
             result_away_score:(result)?result.away_score:undefined,
             result_type: resultController.getResultType(match,result)
         }
-    })
+    });
+
+    var unfinishMatches = _.filter(temps, function(item, index) {
+        return (item.home_score===undefined);
+    });
+
+    var finishMatches = _.sortBy(_.filter(temps, function(item, index) {
+        return (item.home_score!==undefined);
+    }), function(item) {
+        return -item.match_no;
+    });
+
+    return {
+        finishMatches: finishMatches,
+        unfinishMatches: unfinishMatches
+    }
 };
 
 exports.getMatchInfo = async function(req, res) {
