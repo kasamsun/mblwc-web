@@ -65,6 +65,8 @@ nav .nav-wrapper .back-button i {
 .list-row.waves-effect {
     display:flex;
 }
+#ranking_tab .list-row {
+}
 .waves-effect.waves-light-grey .waves-ripple {
     background-color: rgba(224, 224, 224, 0.45);
 }

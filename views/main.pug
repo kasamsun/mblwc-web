@@ -19,7 +19,7 @@ html
           li.tab.col.s3
             a(href='#standing_tab') Result
 
-      - var bkgstyle = (fav_team)?"background:-webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%, rgba(255,255,255, 0.7) 100%), url(/images/"+fav_team+".png) repeat 100% 0;":""
+      - var bkgstyle = (fav_team)?"background:-webkit-linear-gradient(top, rgba(255, 255, 255, 1) 20%, rgba(255,255,255, 0.7) 100%), url(/images/"+fav_team+".png) repeat 100% 0;":""
       ul#player_info.sidenav.bkg-team(style=bkgstyle)
         li
           div.valign-wrapper
@@ -54,7 +54,9 @@ html
 
       #ranking_tab.col.s12          
         for player in players
-          .list-row.row.valign-wrapper.waves-effect.waves-light-grey(onclick="showPlayerPopup(this,'"+player.id+"')",style=(player.id===id)?'background-color: #dff2fa;':'')
+          - var rankstyle = (player.fav_team)?"background:-webkit-linear-gradient(0deg, rgb(255, 255, 255) 66%, rgba(255, 255, 255, 0.7) 100%) repeat scroll 0% 0%, rgba(0, 0, 0, 0) url(/images/"+player.fav_team+".png) repeat 100% -52px":""
+          - if (player.id==id) rankstyle+=";font-weight:bold;";
+          .list-row.row.valign-wrapper.waves-effect.waves-light-grey(onclick="showPlayerPopup(this,'"+player.id+"')",style=rankstyle)
             .player-seq.col.s1.right-align #{player.seq}.
             .player-img.col.s2.right-align
               - var url = "https://graph.facebook.com/"+player.id+"/picture";
