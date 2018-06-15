@@ -73,7 +73,7 @@ exports.calcMatch = async function(req, res) {
     //         calc score
     //         put score in result
 
-    console.log("calcMatch [" + req.body.home_score + "," + req.body.away_score + "]");
+    console.log("calcMatch [" + req.body.match_no + "," + req.body.home_score + "," + req.body.away_score + "]");
     var match = await Match.findOneAndUpdate({
         match_no: req.body.match_no
     },{
@@ -95,10 +95,7 @@ exports.calcMatch = async function(req, res) {
         throw new Error("Result by match " + req.body.match_no + " not found");
     }
 
-    console.log("after update match [" + match.home_score + "," +match.away_score + "]");
-
     for (let result of results) {
-        console.log("compare with result [" + result.home_score + "," +result.away_score + "]");
         if ( result.home_score===home_score && 
                 result.away_score===away_score) {
             result.right_score = 1;
