@@ -84,6 +84,8 @@ exports.calcMatch = async function(req, res) {
     if (!match) {
         throw new Error("Match " + req.body.match_no + " not found");
     }
+    var home_score = Number(req.body.home_score);
+    var away_score = Number(req.body.away_score);
 
     var results = await Result.find({
         match_no: req.body.match_no
@@ -93,28 +95,31 @@ exports.calcMatch = async function(req, res) {
         throw new Error("Result by match " + req.body.match_no + " not found");
     }
 
+    console.log("after update match [" + match.home_score + "," +match.away_score + "]");
+
     for (let result of results) {
-        if ( result.home_score===match.home_score && 
-                result.away_score===match.away_score) {
+        console.log("compare with result [" + result.home_score + "," +result.away_score + "]");
+        if ( result.home_score===home_score && 
+                result.away_score===away_score) {
             result.right_score = 1;
             result.right_result = 0;
             result.wrong_result = 0;
             result.score = scoreConfig[match.match_type][1];
         } else {
             if (result.home_score > result.away_score && 
-                    match.home_score > match.away_score) {
+                    home_score > away_score) {
                 result.right_score = 0;
                 result.right_result = 1;
                 result.wrong_result = 0;
                 result.score = scoreConfig[match.match_type][2];
             } else if (result.home_score===result.away_score && 
-                            match.home_score===match.away_score) {
+                            home_score===away_score) {
                 result.right_score = 0;
                 result.right_result = 1;
                 result.wrong_result = 0;
                 result.score = scoreConfig[match.match_type][2];
             } else if (result.home_score < result.away_score && 
-                            match.home_score < match.away_score) {
+                            home_score < away_score) {
                 result.right_score = 0;
                 result.right_result = 1;
                 result.wrong_result = 0;
