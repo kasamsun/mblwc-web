@@ -42,7 +42,7 @@ exports.login = async function(req, res) {
         }, player).exec();
         
         if (p.n>0) {
-            console.log("Login " + newPlayer.id);
+            console.log("Login [" + newPlayer.id + ", " + player.name + "]");
             return newPlayer;
         }
     } else {
@@ -227,6 +227,7 @@ exports.updatePlayer = async function(req, res) {
         fav_team: req.body.fav_team
     },{upsert: false, 'new': true}).exec();
     
+    console.log("updatePlayer [" + req.payLoad.id + ", " + req.body.fav_team + "]");
     return {
         id: req.payLoad.id,
         fav_team: req.body.fav_team

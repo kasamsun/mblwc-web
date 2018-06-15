@@ -38,6 +38,7 @@ exports.updateResult = async function(req, res) {
         away_score: req.body.away_score
     },{upsert: true, 'new': true}).exec();
     
+    console.log("saveScore [" + result.id + ", " + result.match_no + ", " + result.home_score + ", " + result.away_score + "]");
     return {
         id: result.id,
         match_no: result.match_no,
@@ -71,11 +72,13 @@ exports.calcMatch = async function(req, res) {
     //         select result by a match_no (every player)
     //         calc score
     //         put score in result
-    var match = await Match.findOne({
-        match_no: req.body.match_no,
-        home_score: {
-            $exists: true
-        }
+
+    console.log("calcMatch [" + req.body.home_score + "," + req.body.away_score + "]");
+    var match = await Match.findOneAndUpdate({
+        match_no: req.body.match_no
+    },{
+        home_score: req.body.home_score,
+        away_score: req.body.away_score
     }).exec();
     
     if (!match) {

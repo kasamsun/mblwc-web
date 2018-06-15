@@ -22,6 +22,7 @@ exports.addComment = async function(req, res) {
         submit_timestamp: moment()
     });
     
+    console.log("addComment [" + req.payLoad.id + ", " + req.body.match_no + "]");
     return comment.save();
 };
 

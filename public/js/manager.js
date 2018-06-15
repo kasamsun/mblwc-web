@@ -24,7 +24,9 @@ function calcMatch() {
         type: 'post',
         dataType: 'json',
         data: {
-            match_no: $('#cal_by_match').val()
+            match_no: $('#cal_by_match').val(),
+            home_score: $('#home_score').val(),
+            away_score: $('#away_score').val()
         },
         headers: {
             "x-access-token": getParameterByName('token')
