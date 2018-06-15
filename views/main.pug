@@ -71,6 +71,9 @@ html
         br
 
       #schedule_tab.col.s12
+        for match in finishMatches
+          .list-row.row(style="display:none")
+            div xxx
         for match in unfinishMatches
           .list-row.row.valign-wrapper.waves-effect.waves-light-grey(onclick="showMatchPopup(this,'"+match.match_no+"')")
             .match-seq.col.s1.center-align #{match.match_no}.
