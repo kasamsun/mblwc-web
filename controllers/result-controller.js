@@ -60,7 +60,7 @@ scoreConfig['2'] = [0,7,3,1];
 scoreConfig['Q'] = [0,9,4,1];
 scoreConfig['S'] = [0,11,5,1];
 scoreConfig['3'] = [0,13,6,1];
-scoreConfig['F'] = [0,15,7,1];
+scoreConfig['1'] = [0,15,7,1];
 
 exports.calcMatch = async function(req, res) {
     if (!req.body.match_no) {
