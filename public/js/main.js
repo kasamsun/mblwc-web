@@ -3,6 +3,10 @@ function logoutFacebook() {
     location.href="./signin";
 }
 
+function gotoManager() {
+    location.href="./manager?token="+getParameterByName('token');
+}
+
 $(document).ready(function() {
     $('.sidenav').sidenav();
     $('.tabs').tabs({swipeable:false});

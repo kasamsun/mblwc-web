@@ -104,6 +104,7 @@ exports.getPlayerRank = async function(req, res) {
         right_result: myplayer.right_result,
         wrong_result: myplayer.wrong_result,
         fav_team: myplayer.fav_team,
+        player_status: myplayer.player_status,
         today: moment(),
         players: players.map((player) => {
             return {
@@ -138,11 +139,11 @@ exports.getPlayerInfo = async function(req, res) {
         home_score: {
             $exists: true
         }
-    }).sort({match_no:1}).exec();
+    }).sort({match_no:-1}).exec();
     
     var maxMatch = undefined;
     if (matches.length>0) {
-        maxMatch = matches[matches.length-1].match_no;
+        maxMatch = matches[0].match_no;
     }
     
     if (maxMatch) {
@@ -152,7 +153,7 @@ exports.getPlayerInfo = async function(req, res) {
             match_no: {
                 $lte: maxMatch
             }
-        }).sort({match_no:1}).exec();
+        }).sort({match_no:-1}).exec();
     
         matches = matches.map((match)=>{
             var result = results.find((result)=>{

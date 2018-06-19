@@ -51,6 +51,12 @@ html
           a(href='#',onclick="logoutFacebook()")
             i.material-icons exit_to_app 
             | Quit to login
+        if player_status==="M"
+          li
+            a(href='#',onclick="gotoManager()")
+              i.material-icons developer_mode 
+              | Go to Manager Mode
+
 
       #ranking_tab.col.s12          
         for player in players
