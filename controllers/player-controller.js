@@ -72,7 +72,8 @@ exports.login = async function(req, res) {
     }
 };
 
-exports.getPlayerRankAndMatches = async function(req, res) {    
+exports.getPlayerRankAndMatches = async function(req, res) {
+    console.log("getPlayerRankAndMatches [" + req.payLoad.id + "]");    
     var result = await this.getPlayerRank(req,res);
     var result2 = await matchController.getFinishAndUnfinishMatches(req,res);
     result.unfinishMatches = result2.unfinishMatches;
@@ -109,6 +110,8 @@ exports.getPlayerRank = async function(req, res) {
         players: players.map((player) => {
             return {
                 seq: ++seqNo,
+                position: player.position,
+                last_position: player.last_position,
                 id: player.id,
                 name: player.name,
                 score: player.score,

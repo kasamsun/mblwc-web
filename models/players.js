@@ -11,7 +11,9 @@ var PlayerSchema = new mongoose.Schema({
     wrong_result: {type: Number, required: true},
     player_status: {type: String},
     last_login: {type: Date},
-    fav_team: {type: String}, 
+    fav_team: {type: String},
+    position: {type: Number},
+    last_position: {type: Number}
   }, {
     collection: 'players'  
 });

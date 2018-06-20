@@ -249,3 +249,12 @@ nav .brand-logo {
 .chip {
     background-color:#f0f0f0;
 }
+.rank-up {
+    color: #00e676;
+}
+.rank-down {
+    color: #ff9e80;
+}
+.rank-steady {
+    color: #eeeeee;
+}

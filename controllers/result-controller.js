@@ -233,6 +233,30 @@ exports.sumScore = async function(req, res) {
             wrong_result: result.sum_wrong_result
         }).exec();
     }
+
+    console.log("calcRank"); 
+    var playerRank = await Player.find({}).sort({
+        score:-1
+    });
+    var pos = 1;
+    var last_pos = -1;
+    var last_score = -1;
+    for (let player of playerRank) {
+        if(last_score!==player.score){
+            last_pos = pos;
+            last_score = player.score;
+        }
+        pos++;
+        console.log(last_pos + "(" + ((player.position)?player.position:last_pos) + ") " + player.name + " " + player.score); 
+
+        var n = await Player.findOneAndUpdate({
+            id: player.id
+        },{
+            position: last_pos,
+            last_position: (player.position)?player.position:last_pos
+        }).exec();
+    }
+
       
     console.log("sumMatchScore");    
     var matchResults = await Result.aggregate([{
