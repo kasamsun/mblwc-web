@@ -108,7 +108,7 @@ exports.getMatchInfo = async function(req, res) {
 };
 
 exports.getMatches = async function(req, res) {
-    console.log("getMatches");
+    console.log("getMatches []");
 
     var matches = await Match.find({}).sort({match_no:1}).exec();
 
