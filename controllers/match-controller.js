@@ -133,6 +133,33 @@ exports.getMatches = async function(req, res) {
     return temps;
 };
 
+exports.getTeamDetail = async function(req, res) {
+    console.log("getTeamDetail [" + req.params.team + "]");
+
+    var matches = await Match.find({
+        $or: [ { home_team: req.params.team }, { away_team: req.params.team } ] 
+    }).sort({start_timestamp:1}).exec();
+
+    return matches.map((match)=>{
+        return {
+            match_no: match.match_no,
+            match_type: this.getMatchTypeDesc(match.match_type),
+            match_day: match.match_day,
+            start_timestamp: match.start_timestamp,
+            home_team: match.home_team,
+            away_team: match.away_team,
+            home_team_name: match.home_team_name,
+            away_team_name: match.away_team_name,
+            home_score: match.home_score,
+            away_score: match.away_score,
+            home_score_120: match.home_score_120,
+            away_score_120: match.away_score_120,
+            home_score_pk: match.home_score_pk,
+            away_score_pk: match.away_score_pk
+        }
+    });
+};
+
 exports.getMatchTypeDesc = function(match_type) {
     if (_.contains(['A','B','C','D','E','F','G','H'],match_type)) {
         return 'Group ' + match_type;

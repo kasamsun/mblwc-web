@@ -84,6 +84,9 @@ router.post(["/api/sum-score"], errorHandler(async (req,res) => {
 router.get(["/api/matches"], errorHandler(async (req,res) => {
     res.json(await matchController.getMatches(req,res));
 }))
+router.get(["/api/teams/:team"], errorHandler(async (req,res) => {
+    res.json(await matchController.getTeamDetail(req,res));
+}))
 
 function validateToken(req, res, isAdmin) {
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
