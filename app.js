@@ -7,7 +7,7 @@ var router = require('./routes');
 var db_url = "mongodb://127.0.0.1:27017/mblwc";
 if (process.env.APP_ENV==='PRD'){
     //db_url = "mongodb://mblwc:mblwc@ds133550.mlab.com:33550/mblwc";
-    db_url = "mongodb://"+process.env.DB_USER+":"+process.env.DB_PASSWORD+"@bnjo0mjdq69bryf-mongodb.services.clever-cloud.com:27017/bnjo0mjdq69bryf";
+    db_url = process.env.DB_URI;
 }
 console.log(db_url);
 mongoose.connect(db_url);
